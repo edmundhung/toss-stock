@@ -1,0 +1,38 @@
+{
+  "name": "toss-stock",
+  "version": "0.0.1",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EdStudio/toss-stock.git"
+  },
+  "keywords": [
+    "Electron",
+    "React"
+  ],
+  "author": "Edmund Hung <edmund@edstud.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EdStudio/toss-stock/issues"
+  },
+  "homepage": ".",
+  "dependencies": {
+    "electron": "^1.6.5",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "npm run build && electron .",
+    "react": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
