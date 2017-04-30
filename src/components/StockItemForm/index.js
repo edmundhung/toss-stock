@@ -7,6 +7,7 @@ class StockItemForm extends React.PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateCode = this.updateCode.bind(this);
     this.updateCondition = this.updateCondition.bind(this);
+    this.updateStatus = this.updateStatus.bind(this);
 
     this.state = this.getInitialFormState();
   }
@@ -15,6 +16,7 @@ class StockItemForm extends React.PureComponent {
     return {
       code: '',
       condition: 'good',
+      status: 'on stock',
     };
   }
 
@@ -23,15 +25,17 @@ class StockItemForm extends React.PureComponent {
 
     const code = this.state.code.trim();
     const condition = this.state.condition.trim();
+    const status = this.state.status.trim();
 
     // validation
-    if (code === '' || condition === '') {
+    if (code === '' || condition === '' || status === '') {
       return;
     }
 
     this.props.onSubmit({
       code,
       condition,
+      status,
     });
 
     this.setState(this.getInitialFormState());
@@ -53,10 +57,15 @@ class StockItemForm extends React.PureComponent {
     this.handleChange('condition', event.target.value);
   }
 
+  updateStatus(event) {
+    this.handleChange('status', event.target.value);
+  }
+
   render() {
     const {
       code,
       condition,
+      status,
     } = this.state;
 
     return (
@@ -82,6 +91,18 @@ class StockItemForm extends React.PureComponent {
             <option value="good">Good</option>
             <option value="fair">Fair</option>
             <option value="poor">Poor</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="stock-status">Status:</label>
+          <select
+            id="stock-status"
+            className="form-control"
+            value={status}
+            onChange={this.updateStatus}
+          >
+            <option value="on stock">On stock</option>
+            <option value="discard">Discard</option>
           </select>
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>

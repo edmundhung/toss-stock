@@ -64,10 +64,14 @@ class App extends React.PureComponent {
             <div className="col-md-6 col-md-offset-3">
               <ol>
                 {stocks.map(stock => (
-                  <li key={stock.code}>{stock.code} {stock.condition}</li>
+                  <li key={stock.code}>{stock.code} {stock.condition} {stock.status}</li>
                 ))}
               </ol>
+              <h3>Add stock</h3>
               <StockItemForm onSubmit={this.createStock} />
+              <hr />
+              <h3>Update stock</h3>
+              <StockItemForm onSubmit={this.updateStock} />
             </div>
           </div>
         </div>
