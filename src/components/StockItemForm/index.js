@@ -1,71 +1,91 @@
 import React from 'react';
 import './style.css';
 
-// function StockItemForm(props) {
-//   const {
-//     name,
-//     type,
-//   } = props;
-//
-//   return (
-//     <form>
-//       <label>
-//         Name:
-//         <input type="text" value={name}></input>
-//       </label>
-//       <label>
-//         Type:
-//         <select value={type}>
-//           <option value="book">Book</option>
-//           <option value="CD">CD</option>
-//         </select>
-//       </label>
-//       <button type="submit">Submit</button>
-//       <button type="reset">Reset</button>
-//     </form>
-//   );
-// }
-
 class StockItemForm extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateCode = this.updateCode.bind(this);
+    this.updateCondition = this.updateCondition.bind(this);
 
-    this.state = {
-      name: props.defaultName || '',
-      type: ''
+    this.state = this.getInitialFormState();
+  }
+
+  getInitialFormState() {
+    return {
+      code: '',
+      condition: 'good',
     };
   }
 
-  handleChange(event) {
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const code = this.state.code.trim();
+    const condition = this.state.condition.trim();
+
+    // validation
+    if (code === '' || condition === '') {
+      return;
+    }
+
+    this.props.onSubmit({
+      code,
+      condition,
+    });
+
+    this.setState(this.getInitialFormState());
+  }
+
+  handleChange(name, value) {
     const { readOnly } = this.props;
 
     if (!readOnly) {
-      this.setState({ name: event.target.value });
+      this.setState({ [name]: value });
     }
+  }
+
+  updateCode(event) {
+    this.handleChange('code', event.target.value);
+  }
+
+  updateCondition(event) {
+    this.handleChange('condition', event.target.value);
   }
 
   render() {
     const {
-      name,
-      type,
+      code,
+      condition,
     } = this.state;
 
     return (
-      <form>
-        <label>
-          Name:
-          <input type="text" value={name} onChange={this.handleChange} />
-        </label>
-        <label>
-          Type:
-          <select value={type}>
-            <option value="book">Book</option>
-            <option value="CD">CD</option>
+      <form onSubmit={this.handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="stock-code">Code no.:</label>
+          <input
+            id="stock-code"
+            className="form-control"
+            type="text"
+            value={code}
+            onChange={this.updateCode}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="stock-condition">Physical conditions:</label>
+          <select
+            id="stock-condition"
+            className="form-control"
+            value={condition}
+            onChange={this.updateCondition}
+          >
+            <option value="good">Good</option>
+            <option value="fair">Fair</option>
+            <option value="poor">Poor</option>
           </select>
-        </label>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
+        </div>
+        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="reset" className="btn btn-default">Reset</button>
       </form>
     );
   }
