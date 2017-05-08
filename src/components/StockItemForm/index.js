@@ -22,6 +22,7 @@ class StockItemForm extends React.PureComponent {
     this.updateRemarks = this.updateRemarks.bind(this);
     this.updatePlace = this.updatePlace.bind(this);
     this.updateDateRange = this.updateDateRange.bind(this);
+    this.updateEvent = this.updateEvent.bind(this);
     this.updateStatus = this.updateStatus.bind(this);
 
     this.state = this.getInitialFormState();
@@ -46,6 +47,7 @@ class StockItemForm extends React.PureComponent {
       remarks: '',
       place: '',
       dateRange: '',
+      event: '',
       status: 'on stock',
     };
   }
@@ -54,7 +56,7 @@ class StockItemForm extends React.PureComponent {
     event.preventDefault();
 
     const code = this.state.code.trim();
-    const receivedDate = this.state.receivedDate.trim();
+    // const receivedDate = this.state.receivedDate.trim();
     const condition = this.state.condition.trim();
     const status = this.state.status.trim();
 
@@ -148,6 +150,10 @@ class StockItemForm extends React.PureComponent {
     this.handleChange('dateRange', event.target.value);
   }
 
+  updateEvent(event) {
+    this.handleChange('event', event.target.value);
+  }
+
   updateStatus(event) {
     this.handleChange('status', event.target.value);
   }
@@ -171,6 +177,7 @@ class StockItemForm extends React.PureComponent {
       remarks,
       place,
       dateRange,
+      event,
       status,
     } = this.state;
 
