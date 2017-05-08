@@ -1,5 +1,8 @@
 import React from 'react';
 import StockItemForm from '../StockItemForm';
+import StockPhotoForm from '../StockPhotoForm';
+import StockApprovalForm from '../StockApprovalForm';
+import StockEventForm from '../StockEventForm';
 import logo from '../../logo.svg';
 import './style.css';
 
@@ -70,8 +73,11 @@ class App extends React.PureComponent {
               <h3>Add stock</h3>
               <StockItemForm onSubmit={this.createStock} />
               <hr />
-              <h3>Update stock</h3>
-              <StockItemForm onSubmit={this.updateStock} />
+              <StockPhotoForm onSubmit={null} />
+              <hr />
+              <StockApprovalForm onSubmit={null} />
+              <hr />
+              <StockEventForm onSubmit={null} />
             </div>
           </div>
         </div>

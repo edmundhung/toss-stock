@@ -13,17 +13,6 @@ class StockItemForm extends React.PureComponent {
     this.updateLocation = this.updateLocation.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
     this.updateClassificationNum = this.updateClassificationNum.bind(this);
-    this.updateIdPhotoName = this.updateIdPhotoName.bind(this);
-    this.updateIdPhotoWidth = this.updateIdPhotoWidth.bind(this);
-    this.updateIdPhotoHeight = this.updateIdPhotoHeight.bind(this);
-    this.updateIdPhotoLength = this.updateIdPhotoLength.bind(this);
-    this.updateScannedImage = this.updateScannedImage.bind(this);
-    this.updateSign = this.updateSign.bind(this);
-    this.updateRemarks = this.updateRemarks.bind(this);
-    this.updatePlace = this.updatePlace.bind(this);
-    this.updateDateRange = this.updateDateRange.bind(this);
-    this.updateEvent = this.updateEvent.bind(this);
-    this.updateStatus = this.updateStatus.bind(this);
 
     this.state = this.getInitialFormState();
   }
@@ -38,17 +27,6 @@ class StockItemForm extends React.PureComponent {
       location: '',
       category: '',
       classificationNum: '',
-      idPhotoName: '',
-      idPhotoWidth: '',
-      idPhotoHeight: '',
-      idPhotoLength: '',
-      scannedImage: '',
-      sign: '',
-      remarks: '',
-      place: '',
-      dateRange: '',
-      event: '',
-      status: 'on stock',
     };
   }
 
@@ -114,50 +92,6 @@ class StockItemForm extends React.PureComponent {
     this.handleChange('classificationNum', event.target.value);
   }
 
-  updateIdPhotoName(event) {
-    this.handleChange('idPhotoName', event.target.value);
-  }
-
-  updateIdPhotoWidth(event) {
-    this.handleChange('idPhotoWidth', event.target.value);
-  }
-
-  updateIdPhotoHeight(event) {
-    this.handleChange('idPhotoHeight', event.target.value);
-  }
-
-  updateIdPhotoLength(event) {
-    this.handleChange('idPhotoLength', event.target.value);
-  }
-
-  updateScannedImage(event) {
-    this.handleChange('scannedImage', event.target.value);
-  }
-
-  updateSign(event) {
-    this.handleChange('sign', event.target.value);
-  }
-
-  updateRemarks(event) {
-    this.handleChange('remarks', event.target.value);
-  }
-
-  updatePlace(event) {
-    this.handleChange('place', event.target.value);
-  }
-
-  updateDateRange(event) {
-    this.handleChange('dateRange', event.target.value);
-  }
-
-  updateEvent(event) {
-    this.handleChange('event', event.target.value);
-  }
-
-  updateStatus(event) {
-    this.handleChange('status', event.target.value);
-  }
-
   render() {
     const {
       code,
@@ -168,17 +102,6 @@ class StockItemForm extends React.PureComponent {
       location,
       category,
       classificationNum,
-      idPhotoName,
-      idPhotoWidth,
-      idPhotoHeight,
-      idPhotoLength,
-      scannedImage,
-      sign,
-      remarks,
-      place,
-      dateRange,
-      event,
-      status,
     } = this.state;
 
     return (
@@ -345,115 +268,6 @@ class StockItemForm extends React.PureComponent {
             value={classificationNum}
             disabled
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-id-photo-name">File name of photo:</label>
-          <input
-            id="stock-id-photo-name"
-            className="form-control"
-            type="text"
-            value={idPhotoName}
-            onChange={this.updateIdPhotoName}
-          />
-          <label htmlFor="stock-id-photo-width">Measurements(cm):</label>
-          <input
-            id="stock-id-photo-width"
-            className="form-control"
-            type="text"
-            value={idPhotoWidth}
-            onChange={this.updateIdPhotoWidth}
-            placeholder="Weight"
-          />
-          <span>x</span>
-          <input
-            id="stock-id-photo-height"
-            className="form-control"
-            type="text"
-            value={idPhotoHeight}
-            onChange={this.updateIdPhotoHeight}
-            placeholder="Height"
-          />
-          <span>x</span>
-          <input
-            id="stock-id-photo-length"
-            className="form-control"
-            type="text"
-            value={idPhotoLength}
-            onChange={this.updateIdPhotoLength}
-            placeholder="Length"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-scanned-image">Scanned image:</label>
-          <input
-            id="stock-scanned-image"
-            className="form-control"
-            type="text"
-            value={scannedImage}
-            onChange={this.updateScannedImage}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-sign">Sign:</label>
-          <input
-            id="stock-sign"
-            className="form-control"
-            type="text"
-            value={sign}
-            onChange={this.updateSign}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-remarks">Remarks:</label>
-          <input
-            id="stock-remarks"
-            className="form-control"
-            type="textarea"
-            value={remarks}
-            onChange={this.updateRemarks}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-place">Place:</label>
-          <input
-            id="stock-place"
-            className="form-control"
-            type="textarea"
-            value={place}
-            onChange={this.updatePlace}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-date-range">Date range:</label>
-          <input
-            id="stock-date-range"
-            className="form-control"
-            type="date"
-            value={dateRange}
-            onChange={this.updateDateRange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-event">Event:</label>
-          <input
-            id="stock-event"
-            className="form-control"
-            type="text"
-            value={event}
-            onChange={this.updateEvent}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="stock-status">Status:</label>
-          <select
-            id="stock-status"
-            className="form-control"
-            value={status}
-            onChange={this.updateStatus}
-          >
-            <option value="on stock">On stock</option>
-            <option value="discard">Discard</option>
-          </select>
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
         <button type="reset" className="btn btn-default">Reset</button>
