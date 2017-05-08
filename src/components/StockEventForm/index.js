@@ -7,7 +7,8 @@ class StockEventForm extends React.PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updatePlace = this.updatePlace.bind(this);
     this.updateDates = this.updateDates.bind(this);
-    this.updateEvent = this.updateEvent.bind(this);
+    this.updateName = this.updateName.bind(this);
+    this.updatePeople = this.updatePeople.bind(this);
 
     this.state = this.getInitialFormState();
   }
@@ -16,27 +17,29 @@ class StockEventForm extends React.PureComponent {
     return {
       place: '',
       dates: '',
-      event: '',
+      name: '',
+      people: '',
     };
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const code = this.state.code.trim();
-    // const receivedDate = this.state.receivedDate.trim();
-    const condition = this.state.condition.trim();
-    const status = this.state.status.trim();
+    const place = this.state.place.trim();
+    const dates = this.state.dates.trim();
+    const name = this.state.name.trim();
+    const people = this.state.people.trim();
 
     // validation
-    if (code === '' || condition === '' || status === '') {
+    if (place === '' || dates === '' || name === '' || people === '') {
       return;
     }
 
     this.props.onSubmit({
-      code,
-      condition,
-      status,
+      place,
+      dates,
+      name,
+      people,
     });
 
     this.setState(this.getInitialFormState());
@@ -58,15 +61,20 @@ class StockEventForm extends React.PureComponent {
     this.handleChange('dates', event.target.value);
   }
 
-  updateEvent(event) {
-    this.handleChange('event', event.target.value);
+  updateName(event) {
+    this.handleChange('name', event.target.value);
+  }
+
+  updatePeople(event) {
+    this.handleChange('people', event.target.value);
   }
 
   render() {
     const {
       place,
       dates,
-      event,
+      name,
+      people,
     } = this.state;
 
     return (
@@ -92,13 +100,23 @@ class StockEventForm extends React.PureComponent {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="stock-event">Event:</label>
+          <label htmlFor="stock-name">Event:</label>
           <input
-            id="stock-event"
+            id="stock-name"
             className="form-control"
             type="text"
-            value={event}
-            onChange={this.updateEvent}
+            value={name}
+            onChange={this.updateName}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="stock-people">People:</label>
+          <input
+            id="stock-people"
+            className="form-control"
+            type="text"
+            value={people}
+            onChange={this.updatePeople}
           />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
