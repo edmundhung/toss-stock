@@ -36,17 +36,15 @@ class StockItemForm extends React.PureComponent {
     const code = this.state.code.trim();
     // const receivedDate = this.state.receivedDate.trim();
     const condition = this.state.condition.trim();
-    const status = this.state.status.trim();
 
     // validation
-    if (code === '' || condition === '' || status === '') {
+    if (code === '' || condition === '') {
       return;
     }
 
     this.props.onSubmit({
       code,
       condition,
-      status,
     });
 
     this.setState(this.getInitialFormState());
@@ -105,7 +103,7 @@ class StockItemForm extends React.PureComponent {
     } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="clearfix" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <label htmlFor="stock-code">Code no.:</label>
           <input
@@ -269,8 +267,10 @@ class StockItemForm extends React.PureComponent {
             disabled
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-        <button type="reset" className="btn btn-default">Reset</button>
+        <div className="pull-right">
+          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="reset" className="btn btn-default">Reset</button>
+        </div>
       </form>
     );
   }

@@ -102,7 +102,7 @@ class App extends React.PureComponent {
       <Router>
         <div>
           <Route exact path="/" component={Home} />
-          <Route exact path="/stocks" render={() => <StockList stocks={stocks} />} />
+          <Route exact path="/stocks" render={() => <StockList stocks={stocks} onCreateStock={this.createStock} />} />
           <Route path="/stocks/:code" render={({match}) => <StockDetail {...this.state.stockByCode[match.params.code]} />} />
           <div className="container hidden">
             <div className="row">
