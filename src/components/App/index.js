@@ -1,4 +1,6 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Home from '../Home';
 import StockItemForm from '../StockItemForm';
 import StockPhotoForm from '../StockPhotoForm';
 import StockApprovalForm from '../StockApprovalForm';
@@ -17,7 +19,7 @@ class App extends React.PureComponent {
     this.state = {
       stockByCode: {
         "00001": {
-           code: '0001',
+           code: '00001',
            receivedDate: 21340835092475,
            description: 'dklahsklsdhgafk',
            donor: 'kldfna',
@@ -97,35 +99,27 @@ class App extends React.PureComponent {
     const stocks = this.getStocks();
 
     return (
-      <div>
-        <div className="App">
-          <div className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h2>TOSS Stock Management System</h2>
-          </div>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 col-md-offset-3">
-              <h3>Stock List</h3>
-              <StockList stocks={stocks}/>
-              <h3>Stock Detail</h3>
-              <StockDetail {...this.state.stockByCode["00001"]}/>
-              <h3>Add stock</h3>
-              <StockItemForm onSubmit={this.createStock} />
-              <hr />
-              <StockPhotoForm onSubmit={null} />
-              <hr />
-              <StockApprovalForm onSubmit={null} />
-              <hr />
-              <StockEventForm onSubmit={null} />
+      <Router>
+        <div>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/stocks" render={() => <StockList stocks={stocks} />} />
+          <Route path="/stocks/:code" render={({match}) => <StockDetail {...this.state.stockByCode[match.params.code]} />} />
+          <div className="container hidden">
+            <div className="row">
+              <div className="col-md-6 col-md-offset-3">
+                <h3>Add stock</h3>
+                <StockItemForm onSubmit={this.createStock} />
+                <hr />
+                <StockPhotoForm onSubmit={null} />
+                <hr />
+                <StockApprovalForm onSubmit={null} />
+                <hr />
+                <StockEventForm onSubmit={null} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }
