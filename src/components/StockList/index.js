@@ -11,7 +11,7 @@ class StockList extends React.PureComponent {
     this.onCancel = this.onCancel.bind(this);
 
     this.state = {
-      isAddingStock: false
+      isAddingStock: false,
     };
   }
 
@@ -32,51 +32,73 @@ class StockList extends React.PureComponent {
       props: {
         stocks,
         onCreateStock,
+        isCreatedStock,
       },
       state: { isAddingStock }
     } = this;
 
     return (
-      <div>
-        <button type="button" className="btn btn-success" onClick={this.onAddStock}>Add stock</button>
-        <Modal show={isAddingStock} onHide={this.onCancel}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add stock</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <StockItemForm onSubmit={onCreateStock}/>
-          </Modal.Body>
-        </Modal>
-        <table className="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Date Received</th>
-              <th>Description (w/ situation)</th>
-              <th>Donated by</th>
-              <th>Physical conditions</th>
-              <th>Classification no.</th>
-              <th>Sign</th>
-              <th>Remarks</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {stocks.map(stock => (
-              <tr key={stock.code}>
-                <td>{stock.code}</td>
-                <td>{stock.receivedDate}</td>
-                <td>{stock.description}</td>
-                <td>{stock.donor}</td>
-                <td>{stock.condition}</td>
-                <td>{stock.classificationNum}</td>
-                <td>{stock.sign}</td>
-                <td>{stock.remarks}</td>
-                <td><Link to={`/stocks/${stock.code}`} className="btn btn-info btn-xs">Detail</Link></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <h6>Heritage stoke</h6>
+            <h2>Item List</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <div className="pull-right">
+              <button type="button" className="btn btn-default" onClick={this.onAddStock}>Add stock</button>
+              {isCreatedStock && (
+                <div className="alert alert-success">
+                  Suceess!
+                </div>
+              )}
+              <Modal show={isAddingStock} onHide={this.onCancel}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Add stock</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <StockItemForm onSubmit={onCreateStock}/>
+                </Modal.Body>
+              </Modal>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <div className="table-responsive">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Date Received</th>
+                    <th>Description (w/ situation)</th>
+                    <th>Donated by</th>
+                    <th>Physical conditions</th>
+                    <th>Classification no.</th>
+                    <th>Sign</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody className="text-primary">
+                  {stocks.map(stock => (
+                    <tr key={stock.code}>
+                      <td><Link to={`/stocks/${stock.code}`} className="text-info">#{stock.code}</Link></td>
+                      <td>{stock.receivedDate}</td>
+                      <td>{stock.description}</td>
+                      <td>{stock.donor}</td>
+                      <td>{stock.condition}</td>
+                      <td>{stock.classificationNum}</td>
+                      <td>{stock.sign}</td>
+                      <td>{stock.remarks}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

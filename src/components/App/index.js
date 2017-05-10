@@ -17,6 +17,7 @@ class App extends React.PureComponent {
     this.createStock = this.createStock.bind(this);
     this.updateStock = this.updateStock.bind(this);
     this.state = {
+      isCreatedStock: false,
       stockByCode: {
         "00001": {
            code: '00001',
@@ -64,21 +65,18 @@ class App extends React.PureComponent {
     };
   }
 
-  mergeStock(stock) {
-    this.setState({
-      stockByCode: {
-        ...this.state.stockByCode,
-        [stock.code]: stock,
-      },
-    });
-  }
-
   createStock(stock) {
     if (typeof this.state.stockByCode[stock.code] !== 'undefined') {
       return;
     }
 
-    this.mergeStock(stock);
+    this.setState({
+      stockByCode: {
+        ...this.state.stockByCode,
+        [stock.code]: stock,
+      },
+      isCreatedStock: true,
+    });
   }
 
   updateStock(stock) {
@@ -86,7 +84,12 @@ class App extends React.PureComponent {
       return;
     }
 
-    this.mergeStock(stock);
+    this.setState({
+      stockByCode: {
+        ...this.state.stockByCode,
+        [stock.code]: stock,
+      },
+    });
   }
 
   getStocks() {
@@ -102,7 +105,7 @@ class App extends React.PureComponent {
       <Router>
         <div>
           <Route exact path="/" component={Home} />
-          <Route exact path="/stocks" render={() => <StockList stocks={stocks} onCreateStock={this.createStock} />} />
+          <Route exact path="/stocks" render={() => <StockList stocks={stocks} onCreateStock={this.createStock} isCreatedStock={this.state.isCreatedStock} />} />
           <Route path="/stocks/:code" render={({match}) => <StockDetail {...this.state.stockByCode[match.params.code]} />} />
           <div className="container hidden">
             <div className="row">

@@ -16,9 +16,12 @@ class Home extends React.PureComponent {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md-6 col-md-offset-3 text-center">
-            <h1>Tak Oi Secondary School</h1>
-            <h3>Heritage Stock Management System</h3>
+          <div className="col-xs-8 col-xs-offset-2 text-center">
+            <h3>Tak Oi Secondary School</h3>
+            <h1>Heritage Stock<br/>Management System</h1>
+          </div>
+          <div className="col-xs-4 col-xs-offset-4">
+            <hr />
             <div className="well">
               <ul className="nav nav-pills nav-stacked">
                 <li className=""><Link to="/stocks">Manage Stocks</Link></li>

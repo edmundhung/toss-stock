@@ -1,0 +1,13 @@
+.container {
+  margin-top: 100px;
+}
+
+h3 {
+  font-family: 'Almendra SC';
+}
+
+h1 {
+  font-family: 'Allerta Stencil';
+  text-transform: uppercase;
+  margin: 35px 0 60px 0;
+}
