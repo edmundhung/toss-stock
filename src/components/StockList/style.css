@@ -1,0 +1,8 @@
+h6 {
+  color: #434857;
+  text-transform: uppercase;
+}
+
+.alert-success {
+  z-index: 100;
+}
