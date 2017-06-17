@@ -1,64 +1,90 @@
 import React from 'react';
+import classNames from 'classnames';
 import './style.css';
 
 class StockItemForm extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.updateCode = this.updateCode.bind(this);
     this.updateReceivedDate = this.updateReceivedDate.bind(this);
     this.updateDescription = this.updateDescription.bind(this);
     this.updateDonor = this.updateDonor.bind(this);
     this.updateCondition = this.updateCondition.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
-    this.updateClassificationNum = this.updateClassificationNum.bind(this);
+    this.reset = this.reset.bind(this);
 
     this.state = this.getInitialFormState();
   }
 
   getInitialFormState() {
     return {
-      code: '',
+      submitted: false,
       receivedDate: '',
+      receivedDateError: '',
       description: '',
+      descriptionError: '',
       donor: '',
+      donorError: '',
       condition: 'good',
+      conditionError: '',
       location: '',
+      locationError: '',
       category: '',
-      classificationNum: '',
+      categoryError: '',
     };
+  }
+
+  reset() {
+    this.setState(
+      this.getInitialFormState()
+    );
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const code = this.state.code.trim();
-    const receivedDate = this.state.receivedDate.trim();
-    const description = this.state.description.trim();
-    const donor = this.state.donor.trim();
-    const condition = this.state.condition.trim();
-    const location = this.state.location.trim();
-    const category = this.state.category.trim();
-    const classificationNum = this.state.classificationNum.trim();
+    const stock = {
+      code: this.props.code,
+      receivedDate: this.state.receivedDate.trim(),
+      description: this.state.description.trim(),
+      donor: this.state.donor.trim(),
+      condition: this.state.condition.trim(),
+      location: this.state.location.trim(),
+      category: this.state.category.trim(),
+    };
+
+    let isValid = true;
+    let receivedDateError;
+    let descriptionError;
+    let donorError;
+    let conditionError;
+    let locationError;
+    let categoryError;
 
     // validation
-    if (code === '' || condition === '') {
+    if (stock.condition === '') {
+      isValid = false;
+      conditionError = 'Condition is required.';
+    }
+
+    if (stock.receivedDate === '') {
+      isValid = false;
+      receivedDateError = 'Received Date is required';
+    }
+
+    if (!isValid) {
+      this.setState(() => ({
+        submitted: true,
+        conditionError,
+        receivedDateError,
+      }));
+
       return;
     }
 
-    this.props.onSubmit({
-      code,
-      receivedDate,
-      description,
-      donor,
-      condition,
-      location,
-      category,
-      classificationNum,
-    });
-
-    this.setState(this.getInitialFormState());
+    this.props.onSubmit(stock);
+    this.reset();
   }
 
   handleChange(name, value) {
@@ -67,10 +93,6 @@ class StockItemForm extends React.PureComponent {
     if (!readOnly) {
       this.setState({ [name]: value });
     }
-  }
-
-  updateCode(event) {
-    this.handleChange('code', event.target.value);
   }
 
   updateReceivedDate(event) {
@@ -97,35 +119,37 @@ class StockItemForm extends React.PureComponent {
     this.handleChange('category', event.target.value);
   }
 
-  updateClassificationNum(event) {
-    this.handleChange('classificationNum', event.target.value);
-  }
-
   render() {
     const {
-      code,
-      receivedDate,
-      description,
-      donor,
-      condition,
-      location,
-      category,
-      classificationNum,
-    } = this.state;
+      props: {
+        code,
+      },
+      state: {
+        submitted,
+        receivedDate,
+        receivedDateError,
+        description,
+        descriptionError,
+        donor,
+        donorError,
+        condition,
+        conditionError,
+        location,
+        locationError,
+        category,
+        categoryError,
+      },
+    } = this;
 
     return (
       <form className="clearfix" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <label htmlFor="stock-code">Code no.:</label>
-          <input
-            id="stock-code"
-            className="form-control"
-            type="text"
-            value={code}
-            onChange={this.updateCode}
-          />
+          <div className="form-control-static">
+            {code}
+          </div>
         </div>
-        <div className="form-group">
+        <div className={classNames('form-group', { 'has-error': submitted && receivedDateError })}>
           <label htmlFor="stock-received-date">Date received:</label>
           <input
             id="stock-received-date"
@@ -134,6 +158,9 @@ class StockItemForm extends React.PureComponent {
             value={receivedDate}
             onChange={this.updateReceivedDate}
           />
+          <div className="help-block">
+            {submitted && receivedDateError}
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="stock-description">Description (w/ situation):</label>
@@ -186,6 +213,7 @@ class StockItemForm extends React.PureComponent {
             value={category}
             onChange={this.updateCategory}
           >
+            <option value="" disabled>Please Select</option>
             <optgroup label="行政紙品">
               <option value="AA">點名簿</option>
               <option value="AB">學生手冊</option>
@@ -268,19 +296,9 @@ class StockItemForm extends React.PureComponent {
             </optgroup>
           </select>
         </div>
-        <div className="form-group">
-          <label htmlFor="stock-classification-number">Classification no.:</label>
-          <input
-            id="stock-classification-number"
-            className="form-control"
-            type="text"
-            value={classificationNum}
-            disabled
-          />
-        </div>
         <div className="pull-right">
           <button type="submit" className="btn btn-primary">Submit</button>
-          <button type="reset" className="btn btn-default">Reset</button>
+          <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>
         </div>
       </form>
     );

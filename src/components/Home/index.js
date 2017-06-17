@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 class Home extends React.PureComponent {
@@ -12,7 +8,6 @@ class Home extends React.PureComponent {
   }
 
   render() {
-
     return (
       <div className="container">
         <div className="row">
@@ -24,9 +19,15 @@ class Home extends React.PureComponent {
             <hr />
             <div className="well">
               <ul className="nav nav-pills nav-stacked">
-                <li className=""><Link to="/stocks">Manage Stocks</Link></li>
-                <li className=""><Link to="/stocks">Export Stocks</Link></li>
-                <li className=""><Link to="/stocks">System Setting</Link></li>
+                <li>
+                  <Link to="/stocks">Manage Stocks</Link>
+                </li>
+                <li>
+                  <Link to="/stocks">Export Stocks</Link>
+                </li>
+                <li>
+                  <Link to="/stocks">System Setting</Link>
+                </li>
               </ul>
             </div>
           </div>

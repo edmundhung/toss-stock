@@ -1,63 +1,47 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import StockItemForm from '../StockItemForm';
+import {
+  getStocks,
+  getNextStockCode,
+  getDeletingStockCode,
+  isShowingStockItemForm,
+  isConfirmingStockDelete,
+} from '../../store/reducers';
+import {
+  createStock,
+  deleteStock,
+  showStockItemForm,
+  hideStockItemForm,
+  confirmStockDelete,
+  cancelStockDelete,
+} from '../../store/stock';
 import './style.css';
 
 class StockList extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
-    this.onAddStock = this.onAddStock.bind(this);
-    this.onAddCancel = this.onAddCancel.bind(this);
-    this.onDeleteStock = this.onDeleteStock.bind(this);
-    this.onDeleteCancel = this.onDeleteCancel.bind(this);
-
-    this.state = {
-      isAddingStock: false,
-      isDeletingStock: false,
-    };
-  }
-
-  onAddStock() {
-    this.setState({
-      isAddingStock: true,
-    });
-  }
-
-  onAddCancel() {
-    this.setState({
-      isAddingStock: false,
-    });
-  }
-
-  onDeleteStock(code) {
-    this.setState({
-      isDeletingStock: true,
-      deleteStockCode: code,
-    });
-  }
-
-  onDeleteCancel() {
-    this.setState({
-      isDeletingStock: false,
-    });
   }
 
   render() {
     const {
-      props: {
-        stocks,
-        onCreateStock,
-        isCreatedStock,
-        onDeleteStock,
-        isDeletedStock,
-      },
-      state: {
-        isAddingStock,
-        isDeletingStock,
-        deleteStockCode,
-      }
-    } = this;
+      // state
+      stocks,
+      deletingStockCode,
+      isShowingItemForm,
+      isConfirmingDelete,
+      nextStockCode,
+
+      // action creators
+      createStock,
+      deleteStock,
+      showItemForm,
+      hideItemForm,
+      confirmDelete,
+      cancelDelete,
+    } = this.props;
 
     return (
       <div className="container-fluid">
@@ -70,31 +54,28 @@ class StockList extends React.PureComponent {
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="pull-right">
-              <button type="button" className="btn btn-default" onClick={this.onAddStock}>Add stock</button>
-              {isCreatedStock && (
-                <div className="alert alert-success">
-                  Created Suceessfully!
-                </div>
-              )}
-              {isDeletedStock && (
-                <div className="alert alert-success">
-                  Deleted Suceessfully!
-                </div>
-              )}
-              <Modal show={isAddingStock} onHide={this.onAddCancel}>
+              <button type="button" className="btn btn-default" onClick={showItemForm}>
+                Add stock
+              </button>
+              <Modal show={isShowingItemForm} onHide={hideItemForm}>
                 <Modal.Header closeButton>
                   <Modal.Title>Add stock</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <StockItemForm onSubmit={onCreateStock}/>
+                  <StockItemForm
+                    code={nextStockCode}
+                    onSubmit={createStock}
+                  />
                 </Modal.Body>
               </Modal>
-              <Modal show={isDeletingStock} onHide={this.onDeleteCancel}>
+              <Modal show={isConfirmingDelete} onHide={cancelDelete}>
                 <Modal.Header closeButton>
-                  <Modal.Title>Confirm delete stock #{deleteStockCode}?</Modal.Title>
+                  <Modal.Title>Confirm delete stock #{deletingStockCode}?</Modal.Title>
                 </Modal.Header>
                 <Modal.Footer>
-                  <button type="button" className="btn btn-danger" onClick={() => onDeleteStock(deleteStockCode)}>Confirm</button>
+                  <button type="button" className="btn btn-danger" onClick={() => deleteStock(deletingStockCode)}>
+                    Confirm
+                  </button>
                 </Modal.Footer>
               </Modal>
             </div>
@@ -127,7 +108,15 @@ class StockList extends React.PureComponent {
                       <td>{stock.classificationNum}</td>
                       <td>{stock.sign}</td>
                       <td>{stock.remarks}</td>
-                      <td><button type="button" className="btn btn-link" onClick={() => this.onDeleteStock(stock.code)}>Delete</button></td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-link"
+                          onClick={() => confirmDelete(stock.code)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -140,4 +129,23 @@ class StockList extends React.PureComponent {
   }
 }
 
-export default StockList;
+export function mapStateToProps(state) {
+  return {
+    stocks: getStocks(state),
+    deletingStockCode: getDeletingStockCode(state),
+    isShowingItemForm: isShowingStockItemForm(state),
+    isConfirmingDelete: isConfirmingStockDelete(state),
+    nextStockCode: getNextStockCode(state),
+  };
+}
+
+export const actionCreators = {
+  createStock: createStock,
+  deleteStock: deleteStock,
+  showItemForm: showStockItemForm,
+  hideItemForm: hideStockItemForm,
+  confirmDelete: confirmStockDelete,
+  cancelDelete: cancelStockDelete,
+};
+
+export default connect(mapStateToProps, actionCreators)(StockList);
