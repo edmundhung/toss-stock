@@ -34,8 +34,13 @@ class StockItemForm extends React.PureComponent {
     event.preventDefault();
 
     const code = this.state.code.trim();
-    // const receivedDate = this.state.receivedDate.trim();
+    const receivedDate = this.state.receivedDate.trim();
+    const description = this.state.description.trim();
+    const donor = this.state.donor.trim();
     const condition = this.state.condition.trim();
+    const location = this.state.location.trim();
+    const category = this.state.category.trim();
+    const classificationNum = this.state.classificationNum.trim();
 
     // validation
     if (code === '' || condition === '') {
@@ -44,7 +49,13 @@ class StockItemForm extends React.PureComponent {
 
     this.props.onSubmit({
       code,
+      receivedDate,
+      description,
+      donor,
       condition,
+      location,
+      category,
+      classificationNum,
     });
 
     this.setState(this.getInitialFormState());

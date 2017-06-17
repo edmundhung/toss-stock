@@ -15,9 +15,11 @@ class App extends React.PureComponent {
     super(props, context);
 
     this.createStock = this.createStock.bind(this);
+    this.deleteStock = this.deleteStock.bind(this);
     this.updateStock = this.updateStock.bind(this);
     this.state = {
       isCreatedStock: false,
+      isDeletedStock: false,
       stockByCode: {
         "00001": {
            code: '00001',
@@ -30,12 +32,14 @@ class App extends React.PureComponent {
            classificationNum: 'SB0001',
            photos: [
              {
+               photoId: '1',
                name: '1',
                length: 35,
                width: 12,
                height: 13
              },
              {
+               photoId: '2',
                name: '2',
                length: 35,
                width: 12,
@@ -44,6 +48,7 @@ class App extends React.PureComponent {
            ],
            scannedImages: [
              {
+               scannedImageId: '1',
                name: '1',
                length: 35,
                width: 12,
@@ -52,14 +57,21 @@ class App extends React.PureComponent {
            ],
            sign: 'fsdf',
            remarks: 'djafbsdkf /r/n ',
-           events: [
-             {
-               name: 'music',
-               place: 'abc',
-               dates: '23/4/2015',
-               people: 'pigs',
-             },
-           ]
+           eventNames: [
+             'music',
+             '2017',
+           ],
+           eventDates: [
+             '12/01/2017',
+             '13/01/2017',
+           ],
+           eventLocations: [
+             'Hall',
+           ],
+           eventPeople: [
+             'Ms Sin',
+             'Ms Lam'
+           ],
         }
       },
     };
@@ -76,6 +88,22 @@ class App extends React.PureComponent {
         [stock.code]: stock,
       },
       isCreatedStock: true,
+    });
+  }
+
+  deleteStock(stockCode) {
+    if (typeof this.state.stockByCode[stockCode] !== 'undefined') {
+      return;
+    }
+
+    const stockByCode = Object
+      .keys(this.state.stockByCode)
+      .filter(code => code !== stockCode)
+      .reduce((result, code) => ({ ...result, [code]: this.state.stockByCode[code] }), {})
+
+    this.setState({
+      stockByCode,
+      isDeletedStock: true,
     });
   }
 
@@ -105,8 +133,27 @@ class App extends React.PureComponent {
       <Router>
         <div>
           <Route exact path="/" component={Home} />
-          <Route exact path="/stocks" render={() => <StockList stocks={stocks} onCreateStock={this.createStock} isCreatedStock={this.state.isCreatedStock} />} />
-          <Route path="/stocks/:code" render={({match}) => <StockDetail {...this.state.stockByCode[match.params.code]} />} />
+          <Route
+            exact
+            path="/stocks"
+            render={() =>
+              <StockList
+                stocks={stocks}
+                onCreateStock={this.createStock}
+                isCreatedStock={this.state.isCreatedStock}
+                onDeleteStoke={this.deleteStock}
+                isDeletedStock={this.state.isDeletedStock}
+              />
+            }
+          />
+          <Route
+            path="/stocks/:code"
+            render={({match}) =>
+              <StockDetail
+                {...this.state.stockByCode[match.params.code]}
+              />
+            }
+          />
           <div className="container hidden">
             <div className="row">
               <div className="col-md-6 col-md-offset-3">
