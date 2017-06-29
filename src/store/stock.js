@@ -65,13 +65,13 @@ export const initialState = {
   stockByCode: {
     '00001': {
        code: '00001',
-       receivedDate: 21340835092475,
-       description: 'dklahsklsdhgafk',
-       donor: 'kldfna',
-       condition: 'good',
-       location: 'dsaf',
-       category: 'SB',
-       classificationNum: 'SB0001',
+       receivedDate: '2016-04-23',
+       description: 'World Book Day',
+       donor: 'Library team',
+       condition: 'Good',
+       location: 'Library',
+       category: 'LB',
+       classificationNum: 'LB0001',
        photos: [
          {
            photoId: '1',
@@ -97,22 +97,23 @@ export const initialState = {
            height: 13
          },
        ],
-       sign: 'fsdf',
-       remarks: 'djafbsdkf /r/n ',
+       sign: 'Checked',
+       remarks: 'Borrowed to F.1 classes',
        eventNames: [
-         'music',
-         '2017',
+         'World Book Day',
+         '2016',
        ],
        eventDates: [
-         '12/01/2017',
-         '13/01/2017',
+         '22/04/2016',
+         '23/04/2016',
+         '24/04/2016',
        ],
        eventLocations: [
-         'Hall',
+         'Library',
        ],
        eventPeople: [
          'Ms Sin',
-         'Ms Lam'
+         'Ms Lam',
        ],
     }
   },
@@ -146,6 +147,10 @@ export function isShowingItemForm(state) {
 
 export function isConfirmingDelete(state) {
   return state.deletingStockCode !== null;
+}
+
+export function getStockByCode(state) {
+  return state.stockByCode;
 }
 
 export default function reducer(state = initialState, action) {
