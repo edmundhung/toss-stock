@@ -217,9 +217,9 @@ class StockItemForm extends React.PureComponent {
             onChange={this.updateCondition}
           >
             <option value="">Please select</option>
-            <option value="good">Good</option>
-            <option value="fair">Fair</option>
-            <option value="poor">Poor</option>
+            <option value="Good">Good</option>
+            <option value="Fair">Fair</option>
+            <option value="Poor">Poor</option>
           </select>
           <div className="help-block">
             {submitted && conditionError}
