@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
 import {
   getStockByCode,
 } from '../../store/reducers';
 import {
-
+  showStockItemForm
 } from '../../store/stock';
 import './style.css';
 
@@ -18,26 +19,10 @@ class StockDetail extends React.PureComponent {
     const {
       // state
       stock,
-      // code,
-      // receivedDate,
-      // description,
-      // donor,
-      // condition,
-      // location,
-      // category,
-      // classificationNum,
-      // photos,
-      // scannedImages,
-      // sign,
-      // remarks,
-      // eventNames,
-      // eventDates,
-      // eventLocations,
-      // eventPeople,
-      // onDeleteStoke,
-      // isDeletedStock,
+      isShowingItemForm,
 
       // action creators
+      showEditItemForm,
     } = this.props;
 
     return (
@@ -46,7 +31,21 @@ class StockDetail extends React.PureComponent {
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="well">
               <div className="well">
-                <a href="#" className="btn btn-default btn-xs pull-right">Edit</a>
+                <button type="button" className="btn btn-default btn-xs pull-right" onClick={showEditItemForm}>
+                  Edit
+                </button>
+                // <Modal show={isShowingItemForm} onHide={hideItemForm}>
+                <Modal show={isShowingItemForm}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Edit stock</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <StockItemForm
+                      // code={nextStockCode}
+                      // onSubmit={createStock}
+                    />
+                  </Modal.Body>
+                </Modal>
                 <h4>Basic information</h4>
                 <div className="row">
                   <div className="col-xs-3">Code:</div>
@@ -211,11 +210,12 @@ export function mapStateToProps(state, props) {
 
   return {
     stock,
+    isShowingItemForm: isShowingStockItemForm(state),
   };
 }
 
 export const actionCreators = {
-
+  showEditItemForm: showStockItemForm,
 };
 
 export default connect(mapStateToProps, actionCreators)(StockDetail);
