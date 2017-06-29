@@ -26,12 +26,15 @@ class StockItemForm extends React.PureComponent {
       descriptionError: '',
       donor: '',
       donorError: '',
-      condition: 'good',
+      condition: '',
       conditionError: '',
       location: '',
       locationError: '',
       category: '',
       categoryError: '',
+      classificationNum: '0003',
+      sign: 'Pending',
+      remarks: 'N.A.',
     };
   }
 
@@ -52,6 +55,9 @@ class StockItemForm extends React.PureComponent {
       condition: this.state.condition.trim(),
       location: this.state.location.trim(),
       category: this.state.category.trim(),
+      classificationNum: this.state.category.trim() + this.state.classificationNum.trim(),
+      sign: this.state.sign.trim(),
+      remarks: this.state.remarks.trim(),
     };
 
     let isValid = true;
@@ -63,21 +69,35 @@ class StockItemForm extends React.PureComponent {
     let categoryError;
 
     // validation
-    if (stock.condition === '') {
-      isValid = false;
-      conditionError = 'Condition is required.';
-    }
-
     if (stock.receivedDate === '') {
       isValid = false;
-      receivedDateError = 'Received Date is required';
+      receivedDateError = 'Received date is required.';
+    } else if (stock.description === '') {
+      isValid = false;
+      descriptionError = 'Description is required.';
+    } else if (stock.donor === '') {
+      isValid = false;
+      donorError = 'Donor is required.';
+    } else if (stock.condition === '') {
+      isValid = false;
+      conditionError = 'Condition is required.';
+    } else if (stock.location === '') {
+      isValid = false;
+      locationError = 'Location is required.';
+    } else if (stock.category === '') {
+      isValid = false;
+      categoryError = 'Category is required.';
     }
 
     if (!isValid) {
       this.setState(() => ({
         submitted: true,
-        conditionError,
         receivedDateError,
+        descriptionError,
+        donorError,
+        conditionError,
+        locationError,
+        categoryError,
       }));
 
       return;
@@ -162,7 +182,7 @@ class StockItemForm extends React.PureComponent {
             {submitted && receivedDateError}
           </div>
         </div>
-        <div className="form-group">
+        <div className={classNames('form-group', { 'has-error': submitted && descriptionError })}>
           <label htmlFor="stock-description">Description (w/ situation):</label>
           <input
             id="stock-description"
@@ -171,8 +191,11 @@ class StockItemForm extends React.PureComponent {
             value={description}
             onChange={this.updateDescription}
           />
+          <div className="help-block">
+            {submitted && descriptionError}
+          </div>
         </div>
-        <div className="form-group">
+        <div className={classNames('form-group', { 'has-error': submitted && donorError })}>
           <label htmlFor="stock-donor">Donated by:</label>
           <input
             id="stock-donor"
@@ -181,8 +204,11 @@ class StockItemForm extends React.PureComponent {
             value={donor}
             onChange={this.updateDonor}
           />
+          <div className="help-block">
+            {submitted && donorError}
+          </div>
         </div>
-        <div className="form-group">
+        <div className={classNames('form-group', { 'has-error': submitted && conditionError })}>
           <label htmlFor="stock-condition">Physical conditions:</label>
           <select
             id="stock-condition"
@@ -190,12 +216,16 @@ class StockItemForm extends React.PureComponent {
             value={condition}
             onChange={this.updateCondition}
           >
+            <option value="">Please select</option>
             <option value="good">Good</option>
             <option value="fair">Fair</option>
             <option value="poor">Poor</option>
           </select>
+          <div className="help-block">
+            {submitted && conditionError}
+          </div>
         </div>
-        <div className="form-group">
+        <div className={classNames('form-group', { 'has-error': submitted && locationError })}>
           <label htmlFor="stock-location">Location:</label>
           <input
             id="stock-location"
@@ -204,8 +234,11 @@ class StockItemForm extends React.PureComponent {
             value={location}
             onChange={this.updateLocation}
           />
+          <div className="help-block">
+            {submitted && locationError}
+          </div>
         </div>
-        <div className="form-group">
+        <div className={classNames('form-group', { 'has-error': submitted && categoryError })}>
           <label htmlFor="stock-category">Category:</label>
           <select
             id="stock-category"
@@ -213,7 +246,7 @@ class StockItemForm extends React.PureComponent {
             value={category}
             onChange={this.updateCategory}
           >
-            <option value="" disabled>Please Select</option>
+            <option value="">Please select</option>
             <optgroup label="行政紙品">
               <option value="AA">點名簿</option>
               <option value="AB">學生手冊</option>
@@ -295,6 +328,9 @@ class StockItemForm extends React.PureComponent {
               <option value="OO">其他</option>
             </optgroup>
           </select>
+          <div className="help-block">
+            {submitted && categoryError}
+          </div>
         </div>
         <div className="pull-right">
           <button type="submit" className="btn btn-primary">Submit</button>
