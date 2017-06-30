@@ -64,6 +64,7 @@ class StockList extends React.PureComponent {
                 <Modal.Body>
                   <StockItemForm
                     code={nextStockCode}
+                    stock={null}
                     onSubmit={createStock}
                   />
                 </Modal.Body>

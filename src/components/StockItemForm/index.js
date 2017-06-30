@@ -14,11 +14,13 @@ class StockItemForm extends React.PureComponent {
     this.updateCategory = this.updateCategory.bind(this);
     this.reset = this.reset.bind(this);
 
-    this.state = this.getInitialFormState();
+    this.state = this.getInitialFormState(props);
   }
 
-  getInitialFormState() {
-    return {
+  getInitialFormState(props) {
+    const { stock } = props;
+
+    const defaultState = {
       submitted: false,
       receivedDate: '',
       receivedDateError: '',
@@ -36,11 +38,34 @@ class StockItemForm extends React.PureComponent {
       sign: 'Pending',
       remarks: 'N.A.',
     };
+
+    if (stock === null) {
+      return defaultState;
+    }
+
+    return {
+      ...defaultState,
+      receivedDate: stock.receivedDate,
+      receivedDateError: '',
+      description: stock.description,
+      descriptionError: '',
+      donor: stock.donor,
+      donorError: '',
+      condition: stock.condition,
+      conditionError: '',
+      location: stock.location,
+      locationError: '',
+      category: stock.category,
+      categoryError: '',
+      classificationNum: stock.classificationNum,
+      sign: stock.sign,
+      remarks: stock.remarks,
+    };
   }
 
   reset() {
     this.setState(
-      this.getInitialFormState()
+      this.getInitialFormState(this.props)
     );
   }
 
