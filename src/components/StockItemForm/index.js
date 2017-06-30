@@ -12,6 +12,8 @@ class StockItemForm extends React.PureComponent {
     this.updateCondition = this.updateCondition.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
+    this.updateSign = this.updateSign.bind(this);
+    this.updateRemarks = this.updateRemarks.bind(this);
     this.reset = this.reset.bind(this);
 
     this.state = this.getInitialFormState(props);
@@ -36,7 +38,9 @@ class StockItemForm extends React.PureComponent {
       categoryError: '',
       classificationNum: '0003',
       sign: 'Pending',
+      signError: '',
       remarks: 'N.A.',
+      remarksError: '',
     };
 
     if (stock === null) {
@@ -46,17 +50,11 @@ class StockItemForm extends React.PureComponent {
     return {
       ...defaultState,
       receivedDate: stock.receivedDate,
-      receivedDateError: '',
       description: stock.description,
-      descriptionError: '',
       donor: stock.donor,
-      donorError: '',
       condition: stock.condition,
-      conditionError: '',
       location: stock.location,
-      locationError: '',
       category: stock.category,
-      categoryError: '',
       classificationNum: stock.classificationNum,
       sign: stock.sign,
       remarks: stock.remarks,
@@ -92,6 +90,8 @@ class StockItemForm extends React.PureComponent {
     let conditionError;
     let locationError;
     let categoryError;
+    let signError;
+    let remarksError;
 
     // validation
     if (stock.receivedDate === '') {
@@ -114,6 +114,10 @@ class StockItemForm extends React.PureComponent {
       categoryError = 'Category is required.';
     }
 
+    if (stock.remarks === '') {
+      stock.remarks = "N.A.";
+    }
+
     if (!isValid) {
       this.setState(() => ({
         submitted: true,
@@ -123,6 +127,8 @@ class StockItemForm extends React.PureComponent {
         conditionError,
         locationError,
         categoryError,
+        signError,
+        remarksError,
       }));
 
       return;
@@ -164,6 +170,14 @@ class StockItemForm extends React.PureComponent {
     this.handleChange('category', event.target.value);
   }
 
+  updateSign(event) {
+    this.handleChange('sign', event.target.value);
+  }
+
+  updateRemarks(event) {
+    this.handleChange('remarks', event.target.value);
+  }
+
   render() {
     const {
       props: {
@@ -183,6 +197,10 @@ class StockItemForm extends React.PureComponent {
         locationError,
         category,
         categoryError,
+        sign,
+        signError,
+        remarks,
+        remarksError,
       },
     } = this;
 
@@ -209,13 +227,12 @@ class StockItemForm extends React.PureComponent {
         </div>
         <div className={classNames('form-group', { 'has-error': submitted && descriptionError })}>
           <label htmlFor="stock-description">Description (w/ situation):</label>
-          <input
+          <textarea
             id="stock-description"
             className="form-control"
-            type="textarea"
             value={description}
             onChange={this.updateDescription}
-          />
+          ></textarea>
           <div className="help-block">
             {submitted && descriptionError}
           </div>
@@ -355,6 +372,32 @@ class StockItemForm extends React.PureComponent {
           </select>
           <div className="help-block">
             {submitted && categoryError}
+          </div>
+        </div>
+        <div className={classNames('form-group', { 'has-error': submitted && signError })}>
+          <label htmlFor="stock-sign">Sign:</label>
+          <input
+            disabled={!this.props.stock}
+            id="stock-sign"
+            className="form-control"
+            type="text"
+            value={sign}
+            onChange={this.updateSign}
+          />
+          <div className="help-block">
+            {submitted && signError}
+          </div>
+        </div>
+        <div className={classNames('form-group', { 'has-error': submitted && remarksError })}>
+          <label htmlFor="stock-remarks">Remarks:</label>
+          <textarea
+            id="stock-remarks"
+            className="form-control"
+            value={remarks}
+            onChange={this.updateRemarks}
+          ></textarea>
+          <div className="help-block">
+            {submitted && remarksError}
           </div>
         </div>
         <div className="pull-right">
