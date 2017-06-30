@@ -5,41 +5,63 @@ class StockEventForm extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.updatePlace = this.updatePlace.bind(this);
-    this.updateDates = this.updateDates.bind(this);
-    this.updateName = this.updateName.bind(this);
-    this.updatePeople = this.updatePeople.bind(this);
+    this.updateEventNames = this.updateEventNames.bind(this);
+    this.updateEventDates = this.updateEventDates.bind(this);
+    this.updateEventLocations = this.updateEventLocations.bind(this);
+    this.updateEventPeople = this.updateEventPeople.bind(this);
 
     this.state = this.getInitialFormState();
   }
 
   getInitialFormState() {
     return {
-      place: '',
-      dates: '',
-      name: '',
-      people: '',
+      eventNames: [],
+      eventNamesError: '',
+      eventDates: [],
+      eventDatesError: '',
+      eventLocations: [],
+      eventLocationsError: '',
+      eventPeople: [],
+      eventPeopleError: '',
     };
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const place = this.state.place.trim();
-    const dates = this.state.dates.trim();
-    const name = this.state.name.trim();
-    const people = this.state.people.trim();
+    // const stock = {
+    //   code: this.props.code,
+    //   receivedDate: this.state.receivedDate.trim(),
+    //   description: this.state.description.trim(),
+    //   donor: this.state.donor.trim(),
+    //   condition: this.state.condition.trim(),
+    //   location: this.state.location.trim(),
+    //   category: this.state.category.trim(),
+    //   classificationNum: this.state.category.trim() + this.state.classificationNum.trim(),
+    //   sign: this.state.sign.trim(),
+    //   remarks: this.state.remarks.trim(),
+    //   photos: (this.props.stock != null ) ? this.props.stock.photos : [],
+    //   scannedImages: (this.props.stock != null ) ? this.props.stock.scannedImages : [],
+    //   eventNames: (this.props.stock != null ) ? this.props.stock.eventNames : [],
+    //   eventDates: (this.props.stock != null ) ? this.props.stock.eventDates : [],
+    //   eventLocations: (this.props.stock != null ) ? this.props.stock.eventLocations : [],
+    //   eventPeople: (this.props.stock != null ) ? this.props.stock.eventPeople : [],
+    // }
+    const eventNames = this.state.eventNames.trim();
+    const eventDates = this.state.eventDates.trim();
+    const eventLocations = this.state.eventLocations.trim();
+    const eventPeople = this.state.eventPeople.trim();
 
     // validation
-    if (place === '' || dates === '' || name === '' || people === '') {
+    if (eventNames === '' || eventDates === '' || eventLocations === '' || eventPeople === '') {
       return;
     }
 
     this.props.onSubmit({
-      place,
-      dates,
-      name,
-      people,
+      eventNames,
+      eventDates,
+      eventLocations,
+      eventPeople,
     });
 
     this.setState(this.getInitialFormState());
@@ -53,70 +75,70 @@ class StockEventForm extends React.PureComponent {
     }
   }
 
-  updatePlace(event) {
-    this.handleChange('place', event.target.value);
+  updateEventNames(event) {
+    this.handleChange('eventNames', event.target.value);
   }
 
-  updateDates(event) {
-    this.handleChange('dates', event.target.value);
+  updateEventDates(event) {
+    this.handleChange('eventDates', event.target.value);
   }
 
-  updateName(event) {
-    this.handleChange('name', event.target.value);
+  updateEventLocations(event) {
+    this.handleChange('eventLocations', event.target.value);
   }
 
-  updatePeople(event) {
-    this.handleChange('people', event.target.value);
+  updateEventPeople(event) {
+    this.handleChange('eventPeople', event.target.value);
   }
 
   render() {
     const {
-      place,
-      dates,
-      name,
-      people,
+      eventNames,
+      eventDates,
+      eventLocations,
+      eventPeople,
     } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-group">
-          <label htmlFor="stock-place">Place:</label>
+          <label htmlFor="stock-event-names">Names:</label>
           <input
-            id="stock-place"
+            id="stock-event-names"
             className="form-control"
             type="textarea"
-            value={place}
-            onChange={this.updatePlace}
+            value={eventNames}
+            onChange={this.updateEventNames}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="stock-dates">Dates:</label>
+          <label htmlFor="stock-event-dates">Dates:</label>
           <input
-            id="stock-dates"
+            id="stock-event-dates"
             className="form-control"
             type="text"
-            value={dates}
-            onChange={this.updateDates}
+            value={eventDates}
+            onChange={this.updateEventDates}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="stock-name">Event:</label>
+          <label htmlFor="stock-event-locations">Locations:</label>
           <input
-            id="stock-name"
+            id="stock-event-locations"
             className="form-control"
             type="text"
-            value={name}
-            onChange={this.updateName}
+            value={eventLocations}
+            onChange={this.updateEventLocations}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="stock-people">People:</label>
+          <label htmlFor="stock-event-people">People:</label>
           <input
-            id="stock-people"
+            id="stock-event-people"
             className="form-control"
             type="text"
-            value={people}
-            onChange={this.updatePeople}
+            value={eventPeople}
+            onChange={this.updateEventPeople}
           />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
