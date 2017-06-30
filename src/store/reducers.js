@@ -12,6 +12,7 @@ export const getStocks = state => stockModule.getStocks(state.stock);
 export const getNextStockCode = state => stockModule.getNextStockCode(state.stock);
 export const getDeletingStockCode = state => stockModule.getDeletingStockCode(state.stock);
 export const isShowingStockItemForm = state => stockModule.isShowingItemForm(state.stock);
+export const isShowingStockEventForm = state => stockModule.isShowingEventForm(state.stock);
 export const isConfirmingStockDelete = state => stockModule.isConfirmingDelete(state.stock);
 
 export const getStockByCode = state => stockModule.getStockByCode(state.stock);

@@ -3,14 +3,18 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import StockItemForm from '../StockItemForm';
+import StockEventForm from '../StockEventForm';
 import {
   getStockByCode,
   isShowingStockItemForm,
+  isShowingStockEventForm,
 } from '../../store/reducers';
 import {
   updateStock,
   showStockItemForm,
   hideStockItemForm,
+  showStockEventForm,
+  hideStockEventForm,
 } from '../../store/stock';
 import './style.css';
 
@@ -24,11 +28,14 @@ class StockDetail extends React.PureComponent {
       // state
       stock,
       isShowingItemForm,
+      isShowingEventForm,
 
       // action creators
       updateStock,
       showItemForm,
       hideItemForm,
+      showEventForm,
+      hideEventForm,
     } = this.props;
 
     return (
@@ -144,6 +151,21 @@ class StockDetail extends React.PureComponent {
                 </table>
               </div>
               <div className="well">
+                <button type="button" className="btn btn-default btn-xs pull-right" onClick={showEventForm}>
+                  Edit
+                </button>
+                <Modal show={isShowingEventForm} onHide={hideEventForm}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Update event tags</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <StockEventForm
+                      code={stock.code}
+                      stock={stock}
+                      onSubmit={updateStock}
+                    />
+                  </Modal.Body>
+                </Modal>
                 <h4>Event</h4>
                 <div className="row">
                   <div className="col-xs-3">
@@ -217,6 +239,7 @@ export function mapStateToProps(state, props) {
   return {
     stock,
     isShowingItemForm: isShowingStockItemForm(state),
+    isShowingEventForm: isShowingStockEventForm(state),
   };
 }
 
@@ -224,6 +247,8 @@ export const actionCreators = {
   updateStock: updateStock,
   showItemForm: showStockItemForm,
   hideItemForm: hideStockItemForm,
+  showEventForm: showStockEventForm,
+  hideEventForm: hideStockEventForm,
 };
 
 export default connect(mapStateToProps, actionCreators)(StockDetail);

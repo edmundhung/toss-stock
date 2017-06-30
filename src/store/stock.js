@@ -3,6 +3,8 @@ export const UPDATE = 'stock/UPDATE';
 export const DELETE = 'stock/DELETE';
 export const ITEM_FORM_SHOW = 'stock/ITEM_FORM_SHOW';
 export const ITEM_FORM_HIDE = 'stock/ITEM_FORM_HIDE';
+export const EVENT_FORM_SHOW = 'stock/EVENT_FORM_SHOW';
+export const EVENT_FORM_HIDE = 'stock/EVENT_FORM_HIDE';
 export const DELETE_CONFIRM = 'stock/DELETE_CONFIRM';
 export const DELETE_CANCEL = 'stock/DELETE_CANCEL';
 
@@ -45,6 +47,18 @@ export function showStockItemForm() {
 export function hideStockItemForm() {
   return {
     type: ITEM_FORM_HIDE,
+  };
+}
+
+export function showStockEventForm() {
+  return {
+    type: EVENT_FORM_SHOW,
+  };
+}
+
+export function hideStockEventForm() {
+  return {
+    type: EVENT_FORM_HIDE,
   };
 }
 
@@ -118,6 +132,7 @@ export const initialState = {
     }
   },
   isShowingItemForm: false,
+  isShowingEventForm: false,
   deletingStockCode: null,
 };
 
@@ -143,6 +158,10 @@ export function getDeletingStockCode(state) {
 
 export function isShowingItemForm(state) {
   return state.isShowingItemForm;
+}
+
+export function isShowingEventForm(state) {
+  return state.isShowingEventForm;
 }
 
 export function isConfirmingDelete(state) {
@@ -207,6 +226,18 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isShowingItemForm: false,
+      };
+    }
+    case EVENT_FORM_SHOW: {
+      return {
+        ...state,
+        isShowingEventForm: true,
+      };
+    }
+    case EVENT_FORM_HIDE: {
+      return {
+        ...state,
+        isShowingEventForm: false,
       };
     }
     case DELETE_CONFIRM: {
