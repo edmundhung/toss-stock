@@ -1,5 +1,5 @@
 export const CREATE = 'stock/CREATE';
-export const UPDATE = 'stock/UPDATE';
+export const UPDATE_ITEM = 'stock/UPDATE_ITEM';
 export const DELETE = 'stock/DELETE';
 export const ITEM_FORM_SHOW = 'stock/ITEM_FORM_SHOW';
 export const ITEM_FORM_HIDE = 'stock/ITEM_FORM_HIDE';
@@ -18,9 +18,9 @@ export function createStock(stock) {
   };
 }
 
-export function updateStock(stock) {
+export function updateStockItem(stock) {
   return {
-    type: UPDATE,
+    type: UPDATE_ITEM,
     payload: {
       stock,
       timestamp: Date.now(),
@@ -187,11 +187,14 @@ export default function reducer(state = initialState, action) {
         isShowingItemForm: false,
       };
     }
-    case UPDATE: {
+    case UPDATE_ITEM: {
       const { stock, timestamp } = action.payload;
       const stockByCode = {
         ...state.stockByCode,
-        [stock.code]: stock
+        [stock.code]: {
+          ...state.stockByCode[stock.code],
+          ...stock,
+        },
       };
 
       return {

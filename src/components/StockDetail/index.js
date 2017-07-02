@@ -10,7 +10,7 @@ import {
   isShowingStockEventForm,
 } from '../../store/reducers';
 import {
-  updateStock,
+  updateStockItem,
   showStockItemForm,
   hideStockItemForm,
   showStockEventForm,
@@ -31,7 +31,7 @@ class StockDetail extends React.PureComponent {
       isShowingEventForm,
 
       // action creators
-      updateStock,
+      updateStockItem,
       showItemForm,
       hideItemForm,
       showEventForm,
@@ -55,7 +55,7 @@ class StockDetail extends React.PureComponent {
                     <StockItemForm
                       code={stock.code}
                       stock={stock}
-                      onSubmit={updateStock}
+                      onSubmit={updateStockItem}
                     />
                   </Modal.Body>
                 </Modal>
@@ -162,7 +162,7 @@ class StockDetail extends React.PureComponent {
                     <StockEventForm
                       code={stock.code}
                       stock={stock}
-                      onSubmit={updateStock}
+                      onSubmit={updateStockItem}
                     />
                   </Modal.Body>
                 </Modal>
@@ -244,7 +244,7 @@ export function mapStateToProps(state, props) {
 }
 
 export const actionCreators = {
-  updateStock: updateStock,
+  updateStockItem: updateStockItem,
   showItemForm: showStockItemForm,
   hideItemForm: hideStockItemForm,
   showEventForm: showStockEventForm,

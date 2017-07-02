@@ -81,12 +81,6 @@ class StockItemForm extends React.PureComponent {
       classificationNum: this.state.category.trim() + this.state.classificationNum.trim(),
       sign: this.state.sign.trim(),
       remarks: this.state.remarks.trim(),
-      photos: (this.props.stock != null ) ? this.props.stock.photos : [],
-      scannedImages: (this.props.stock != null ) ? this.props.stock.scannedImages : [],
-      eventNames: (this.props.stock != null ) ? this.props.stock.eventNames : [],
-      eventDates: (this.props.stock != null ) ? this.props.stock.eventDates : [],
-      eventLocations: (this.props.stock != null ) ? this.props.stock.eventLocations : [],
-      eventPeople: (this.props.stock != null ) ? this.props.stock.eventPeople : [],
     };
 
     let isValid = true;
