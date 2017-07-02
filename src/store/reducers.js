@@ -10,6 +10,8 @@ const reducer = combineReducers({
 export const getHistory = state => state.history;
 export const getStocks = state => stockModule.getStocks(state.stock);
 export const getNextStockCode = state => stockModule.getNextStockCode(state.stock);
+export const getItemFormCode = state => stockModule.getItemFormCode(state.stock);
+export const getEventFormCode = state => stockModule.getEventFormCode(state.stock);
 export const getDeletingStockCode = state => stockModule.getDeletingStockCode(state.stock);
 export const isShowingStockItemForm = state => stockModule.isShowingItemForm(state.stock);
 export const isShowingStockEventForm = state => stockModule.isShowingEventForm(state.stock);

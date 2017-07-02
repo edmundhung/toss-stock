@@ -1,5 +1,6 @@
 export const CREATE = 'stock/CREATE';
 export const UPDATE_ITEM = 'stock/UPDATE_ITEM';
+export const UPDATE_EVENT = 'stock/UPDATE_EVENT';
 export const DELETE = 'stock/DELETE';
 export const ITEM_FORM_SHOW = 'stock/ITEM_FORM_SHOW';
 export const ITEM_FORM_HIDE = 'stock/ITEM_FORM_HIDE';
@@ -28,6 +29,16 @@ export function updateStockItem(stock) {
   };
 }
 
+export function updateStockEvent(eventTag) {
+  return {
+    type: UPDATE_EVENT,
+    payload: {
+      eventTag,
+      timestamp: Date.now(),
+    },
+  };
+}
+
 export function deleteStock(code) {
   return {
     type: DELETE,
@@ -38,9 +49,10 @@ export function deleteStock(code) {
   };
 }
 
-export function showStockItemForm() {
+export function showStockItemForm(code) {
   return {
     type: ITEM_FORM_SHOW,
+    payload: code,
   };
 }
 
@@ -50,9 +62,10 @@ export function hideStockItemForm() {
   };
 }
 
-export function showStockEventForm() {
+export function showStockEventForm(code) {
   return {
     type: EVENT_FORM_SHOW,
+    payload: code,
   };
 }
 
@@ -131,9 +144,10 @@ export const initialState = {
        ],
     }
   },
-  isShowingItemForm: false,
-  isShowingEventForm: false,
-  deletingStockCode: null,
+
+  // model
+  openingModel: null,
+  relatedStockCode: null
 };
 
 export function getStocks(state) {
@@ -152,20 +166,40 @@ export function getNextStockCode(state) {
   return (lastStockCode + 1).toString().padStart(5, '0');
 }
 
-export function getDeletingStockCode(state) {
-  return state.deletingStockCode;
-}
-
 export function isShowingItemForm(state) {
-  return state.isShowingItemForm;
+  return state.openingModel === 'ITEM';
 }
 
 export function isShowingEventForm(state) {
-  return state.isShowingEventForm;
+  return state.openingModel === 'EVENT';
 }
 
 export function isConfirmingDelete(state) {
-  return state.deletingStockCode !== null;
+  return state.openingModel === 'DELETE';
+}
+
+export function getDeletingStockCode(state) {
+  if (!isConfirmingDelete(state)) {
+    return null;
+  }
+
+  return state.relatedStockCode;
+}
+
+export function getItemFormCode(state) {
+  if (!isShowingItemForm(state)) {
+    return null;
+  }
+
+  return state.relatedStockCode;
+}
+
+export function getEventFormCode(state) {
+  if (!isShowingEventForm(state)) {
+    return null;
+  }
+
+  return state.relatedStockCode;
 }
 
 export function getStockByCode(state) {
@@ -175,7 +209,7 @@ export function getStockByCode(state) {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case CREATE: {
-      const { stock, timestamp } = action.payload;
+      const { stock } = action.payload;
       const stockByCode = {
         ...state.stockByCode,
         [stock.code]: stock
@@ -184,11 +218,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         stockByCode,
-        isShowingItemForm: false,
+        openingModel: initialState.openingModel,
       };
     }
     case UPDATE_ITEM: {
-      const { stock, timestamp } = action.payload;
+      const { stock } = action.payload;
       const stockByCode = {
         ...state.stockByCode,
         [stock.code]: {
@@ -200,14 +234,31 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         stockByCode,
-        isShowingItemForm: false,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+      };
+    }
+    case UPDATE_EVENT: {
+      const { eventTag } = action.payload;
+      const stockByCode = {
+        ...state.stockByCode,
+        [state.relatedStockCode]: {
+          ...state.stockByCode[state.relatedStockCode],
+          ...eventTag,
+        },
+      };
+
+      return {
+        ...state,
+        stockByCode,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
       };
     }
     case DELETE: {
-      const { code, timestamp } = action.payload;
       const stockByCode = Object
         .keys(state.stockByCode)
-        .filter(key => key !== code)
+        .filter(key => key !== state.relatedStockCode)
         .reduce((result, code) => ({
           ...result,
           [code]: state.stockByCode[code],
@@ -216,43 +267,37 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         stockByCode,
-        deletingStockCode: initialState.deletingStockCode,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
       };
     }
     case ITEM_FORM_SHOW: {
       return {
         ...state,
-        isShowingItemForm: true,
+        openingModel: 'ITEM',
+        relatedStockCode: action.payload || state.relatedStockCode
       };
     }
-    case ITEM_FORM_HIDE: {
+    case DELETE_CANCEL:
+    case ITEM_FORM_HIDE:
+    case EVENT_FORM_HIDE:
       return {
         ...state,
-        isShowingItemForm: false,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
       };
-    }
     case EVENT_FORM_SHOW: {
       return {
         ...state,
-        isShowingEventForm: true,
-      };
-    }
-    case EVENT_FORM_HIDE: {
-      return {
-        ...state,
-        isShowingEventForm: false,
+        openingModel: 'EVENT',
+        relatedStockCode: action.payload,
       };
     }
     case DELETE_CONFIRM: {
       return {
         ...state,
-        deletingStockCode: action.payload,
-      };
-    }
-    case DELETE_CANCEL: {
-      return {
-        ...state,
-        deletingStockCode: initialState.deletingStockCode,
+        openingModel: 'DELETE',
+        relatedStockCode: action.payload,
       };
     }
     default:

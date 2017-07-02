@@ -258,7 +258,7 @@ class StockItemForm extends React.PureComponent {
             value={condition}
             onChange={this.updateCondition}
           >
-            <option value="">Please select</option>
+            <option value="" disabled>Please select</option>
             <option value="Good">Good</option>
             <option value="Fair">Fair</option>
             <option value="Poor">Poor</option>
@@ -288,7 +288,7 @@ class StockItemForm extends React.PureComponent {
             value={category}
             onChange={this.updateCategory}
           >
-            <option value="">Please select</option>
+            <option value="" disabled>Please select</option>
             <optgroup label="行政紙品">
               <option value="AA">點名簿</option>
               <option value="AB">學生手冊</option>
@@ -402,7 +402,7 @@ class StockItemForm extends React.PureComponent {
         </div>
         <div className="pull-right">
           <button type="submit" className="btn btn-primary">Submit</button>
-          <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>
+          <button type="button" className="btn btn-default" onClick={this.reset}>Reset</button>
         </div>
       </form>
     );

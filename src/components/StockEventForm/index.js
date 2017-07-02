@@ -9,12 +9,15 @@ class StockEventForm extends React.PureComponent {
     this.updateEventDates = this.updateEventDates.bind(this);
     this.updateEventLocations = this.updateEventLocations.bind(this);
     this.updateEventPeople = this.updateEventPeople.bind(this);
+    this.reset = this.reset.bind(this);
 
-    this.state = this.getInitialFormState();
+    this.state = this.getInitialFormState(props);
   }
 
-  getInitialFormState() {
-    return {
+  getInitialFormState(props) {
+    const { stock } = props;
+
+    const defaultState = {
       eventNames: [],
       eventNamesError: '',
       eventDates: [],
@@ -24,47 +27,38 @@ class StockEventForm extends React.PureComponent {
       eventPeople: [],
       eventPeopleError: '',
     };
+
+    if (stock === null) {
+      return defaultState;
+    }
+
+    return {
+      ...defaultState,
+      eventNames: stock.eventNames.join(', '),
+      eventDates: stock.eventDates.join(', '),
+      eventLocations: stock.eventLocations.join(', '),
+      eventPeople: stock.eventPeople.join(', '),
+    };
+  }
+
+  reset() {
+    this.setState(
+      this.getInitialFormState(this.props)
+    );
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    // const stock = {
-    //   code: this.props.code,
-    //   receivedDate: this.state.receivedDate.trim(),
-    //   description: this.state.description.trim(),
-    //   donor: this.state.donor.trim(),
-    //   condition: this.state.condition.trim(),
-    //   location: this.state.location.trim(),
-    //   category: this.state.category.trim(),
-    //   classificationNum: this.state.category.trim() + this.state.classificationNum.trim(),
-    //   sign: this.state.sign.trim(),
-    //   remarks: this.state.remarks.trim(),
-    //   photos: (this.props.stock != null ) ? this.props.stock.photos : [],
-    //   scannedImages: (this.props.stock != null ) ? this.props.stock.scannedImages : [],
-    //   eventNames: (this.props.stock != null ) ? this.props.stock.eventNames : [],
-    //   eventDates: (this.props.stock != null ) ? this.props.stock.eventDates : [],
-    //   eventLocations: (this.props.stock != null ) ? this.props.stock.eventLocations : [],
-    //   eventPeople: (this.props.stock != null ) ? this.props.stock.eventPeople : [],
-    // }
-    const eventNames = this.state.eventNames.trim();
-    const eventDates = this.state.eventDates.trim();
-    const eventLocations = this.state.eventLocations.trim();
-    const eventPeople = this.state.eventPeople.trim();
+    const eventTag = {
+      eventNames: this.state.eventNames.split(',').map(name => name.trim()),
+      eventDates: this.state.eventDates.split(',').map(date => date.trim()),
+      eventLocations: this.state.eventLocations.split(',').map(location => location.trim()),
+      eventPeople: this.state.eventPeople.split(',').map(person => person.trim()),
+    };
 
-    // validation
-    if (eventNames === '' || eventDates === '' || eventLocations === '' || eventPeople === '') {
-      return;
-    }
-
-    this.props.onSubmit({
-      eventNames,
-      eventDates,
-      eventLocations,
-      eventPeople,
-    });
-
-    this.setState(this.getInitialFormState());
+    this.props.onSubmit(eventTag);
+    this.reset();
   }
 
   handleChange(name, value) {
@@ -93,11 +87,16 @@ class StockEventForm extends React.PureComponent {
 
   render() {
     const {
-      eventNames,
-      eventDates,
-      eventLocations,
-      eventPeople,
-    } = this.state;
+      props: {
+        code,
+      },
+      state: {
+        eventNames,
+        eventDates,
+        eventLocations,
+        eventPeople,
+      },
+    } = this;
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -142,7 +141,7 @@ class StockEventForm extends React.PureComponent {
           />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
-        <button type="reset" className="btn btn-default">Reset</button>
+        <button type="button" className="btn btn-default" onClick={this.reset}>Reset</button>
       </form>
     );
   }

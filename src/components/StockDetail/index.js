@@ -6,11 +6,14 @@ import StockItemForm from '../StockItemForm';
 import StockEventForm from '../StockEventForm';
 import {
   getStockByCode,
+  getItemFormCode,
+  getEventFormCode,
   isShowingStockItemForm,
   isShowingStockEventForm,
 } from '../../store/reducers';
 import {
   updateStockItem,
+  updateStockEvent,
   showStockItemForm,
   hideStockItemForm,
   showStockEventForm,
@@ -29,9 +32,12 @@ class StockDetail extends React.PureComponent {
       stock,
       isShowingItemForm,
       isShowingEventForm,
+      itemFormCode,
+      eventFormCode,
 
       // action creators
       updateStockItem,
+      updateStockEvent,
       showItemForm,
       hideItemForm,
       showEventForm,
@@ -44,12 +50,12 @@ class StockDetail extends React.PureComponent {
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="well">
               <div className="well">
-                <button type="button" className="btn btn-default btn-xs pull-right" onClick={showItemForm}>
+                <button type="button" className="btn btn-default btn-xs pull-right" onClick={() => showItemForm(stock.code)}>
                   Edit
                 </button>
                 <Modal show={isShowingItemForm} onHide={hideItemForm}>
                   <Modal.Header closeButton>
-                    <Modal.Title>Update stock</Modal.Title>
+                    <Modal.Title>Update stock #{itemFormCode}</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
                     <StockItemForm
@@ -151,18 +157,18 @@ class StockDetail extends React.PureComponent {
                 </table>
               </div>
               <div className="well">
-                <button type="button" className="btn btn-default btn-xs pull-right" onClick={showEventForm}>
+                <button type="button" className="btn btn-default btn-xs pull-right" onClick={() => showEventForm(stock.code)}>
                   Edit
                 </button>
                 <Modal show={isShowingEventForm} onHide={hideEventForm}>
                   <Modal.Header closeButton>
-                    <Modal.Title>Update event tags</Modal.Title>
+                    <Modal.Title>Update event tags #{eventFormCode}</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
                     <StockEventForm
                       code={stock.code}
                       stock={stock}
-                      onSubmit={updateStockItem}
+                      onSubmit={updateStockEvent}
                     />
                   </Modal.Body>
                 </Modal>
@@ -240,11 +246,14 @@ export function mapStateToProps(state, props) {
     stock,
     isShowingItemForm: isShowingStockItemForm(state),
     isShowingEventForm: isShowingStockEventForm(state),
+    itemFormCode: getItemFormCode(state),
+    eventFormCode: getEventFormCode(state),
   };
 }
 
 export const actionCreators = {
   updateStockItem: updateStockItem,
+  updateStockEvent: updateStockEvent,
   showItemForm: showStockItemForm,
   hideItemForm: hideStockItemForm,
   showEventForm: showStockEventForm,

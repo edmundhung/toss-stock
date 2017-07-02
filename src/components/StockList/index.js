@@ -54,7 +54,7 @@ class StockList extends React.PureComponent {
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="pull-right">
-              <button type="button" className="btn btn-default" onClick={showItemForm}>
+              <button type="button" className="btn btn-default" onClick={() => showItemForm()}>
                 Add stock
               </button>
               <Modal show={isShowingItemForm} onHide={hideItemForm}>
