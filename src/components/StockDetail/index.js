@@ -4,12 +4,17 @@ import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import StockItemForm from '../StockItemForm';
 import StockEventForm from '../StockEventForm';
+import StockPhotoForm from '../StockPhotoForm';
 import {
   getStockByCode,
   getItemFormCode,
   getEventFormCode,
   isShowingStockItemForm,
   isShowingStockEventForm,
+  isShowingIdPhotoForm,
+  isConfirmingDeleteIdPhoto,
+  isShowingScanPhotoForm,
+  isConfirmingDeleteScanPhoto,
 } from '../../store/reducers';
 import {
   updateStockItem,
@@ -18,6 +23,18 @@ import {
   hideStockItemForm,
   showStockEventForm,
   hideStockEventForm,
+  createIdPhoto,
+  deleteIdPhoto,
+  createScanPhoto,
+  deleteScanPhoto,
+  showIdPhotoForm,
+  hideIdPhotoForm,
+  confirmIdPhotoDelete,
+  cancelIdPhotoDelete,
+  showScanPhotoForm,
+  hideScanPhotoForm,
+  confirmScanPhotoDelete,
+  cancelScanPhotoDelete,
 } from '../../store/stock';
 import './style.css';
 
@@ -34,6 +51,10 @@ class StockDetail extends React.PureComponent {
       isShowingEventForm,
       itemFormCode,
       eventFormCode,
+      isShowingIdPhotoForm,
+      isConfirmingDeleteIdPhoto,
+      isShowingScanPhotoForm,
+      isConfirmingDeleteScanPhoto,
 
       // action creators
       updateStockItem,
@@ -42,6 +63,16 @@ class StockDetail extends React.PureComponent {
       hideItemForm,
       showEventForm,
       hideEventForm,
+      showIdPhotoForm,
+      hideIdPhotoForm,
+      confirmIdPhotoDelete,
+      cancelIdPhotoDelete,
+      deleteIdPhoto,
+      showScanPhotoForm,
+      hideScanPhotoForm,
+      confirmScanPhotoDelete,
+      cancelScanPhotoDelete,
+      deleteScanPhoto,
     } = this.props;
 
     return (
@@ -113,7 +144,23 @@ class StockDetail extends React.PureComponent {
                   <thead>
                     <tr className="active">
                       <th colSpan="4">ID photos</th>
-                      <th><a href="#" className="btn btn-default btn-xs pull-right">Add ID photo</a></th>
+                      <th>
+                        <button
+                          type="button"
+                          className="btn btn-default btn-xs pull-right"
+                          onClick={() => showIdPhotoForm(stock.code)}
+                        >
+                          Add ID photo
+                        </button>
+                        <Modal show={isShowingIdPhotoForm} onHide={hideIdPhotoForm}>
+                          <Modal.Header closeButton>
+                            <Modal.Title>Add ID photo for stock #{stock.code}</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <StockPhotoForm />
+                          </Modal.Body>
+                        </Modal>
+                      </th>
                     </tr>
                     <tr>
                       <th>name</th>
@@ -125,21 +172,55 @@ class StockDetail extends React.PureComponent {
                   </thead>
                   <tbody>
                     {(stock.photos || []).map(photo => (
-                    <tr key={photo.photoId}>
-                      <td>{photo.name}</td>
-                      <td>{photo.width}</td>
-                      <td>{photo.height}</td>
-                      <td>{photo.length}</td>
-                      <td><a href="#" className="btn btn-danger btn-xs pull-right">Delete photo</a></td>
-                    </tr>
-                  ))}
+                      <tr key={photo.photoId}>
+                        <td>{photo.name}</td>
+                        <td>{photo.width}</td>
+                        <td>{photo.height}</td>
+                        <td>{photo.length}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-xs pull-right"
+                            onClick={() => confirmIdPhotoDelete(stock.code, photo.photoId)}
+                          >
+                            Delete photo
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
+                  <Modal show={isConfirmingDeleteIdPhoto} onHide={cancelIdPhotoDelete}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Confirm delete that ID photo?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Footer>
+                      <button type="button" className="btn btn-danger" onClick={deleteIdPhoto}>
+                        Confirm
+                      </button>
+                    </Modal.Footer>
+                  </Modal>
                 </table>
                 <table className="table table-hover">
                   <thead>
                     <tr className="active">
                       <th colSpan="4">Scanned images</th>
-                      <th><a href="#" className="btn btn-default btn-xs pull-right">Add scanned image</a></th>
+                      <th>
+                        <button
+                          type="button"
+                          className="btn btn-default btn-xs pull-right"
+                          onClick={() => showScanPhotoForm(stock.code)}
+                        >
+                          Add scanned image
+                        </button>
+                        <Modal show={isShowingScanPhotoForm} onHide={hideScanPhotoForm}>
+                          <Modal.Header closeButton>
+                            <Modal.Title>Add scanned image for stock #{stock.code}</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <StockPhotoForm />
+                          </Modal.Body>
+                        </Modal>
+                      </th>
                     </tr>
                     <tr>
                       <th colSpan="4">name</th>
@@ -148,12 +229,30 @@ class StockDetail extends React.PureComponent {
                   </thead>
                   <tbody>
                     {(stock.scannedImages || []).map(scannedImage => (
-                    <tr key={scannedImage.scannedImageId}>
-                      <td colSpan="4">{scannedImage.name}</td>
-                      <td><a href="#" className="btn btn-danger btn-xs pull-right">Delete photo</a></td>
-                    </tr>
-                  ))}
+                      <tr key={scannedImage.scannedImageId}>
+                        <td colSpan="4">{scannedImage.name}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-xs pull-right"
+                            onClick={() => confirmScanPhotoDelete(stock.code, scannedImage.scannedImageId)}
+                          >
+                            Delete photo
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
+                  <Modal show={isConfirmingDeleteScanPhoto} onHide={cancelScanPhotoDelete}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Confirm delete that scanned image?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Footer>
+                      <button type="button" className="btn btn-danger" onClick={deleteScanPhoto}>
+                        Confirm
+                      </button>
+                    </Modal.Footer>
+                  </Modal>
                 </table>
               </div>
               <div className="well">
@@ -248,6 +347,10 @@ export function mapStateToProps(state, props) {
     isShowingEventForm: isShowingStockEventForm(state),
     itemFormCode: getItemFormCode(state),
     eventFormCode: getEventFormCode(state),
+    isShowingIdPhotoForm: isShowingIdPhotoForm(state),
+    isConfirmingDeleteIdPhoto: isConfirmingDeleteIdPhoto(state),
+    isShowingScanPhotoForm: isShowingScanPhotoForm(state),
+    isConfirmingDeleteScanPhoto: isConfirmingDeleteScanPhoto(state),
   };
 }
 
@@ -258,6 +361,16 @@ export const actionCreators = {
   hideItemForm: hideStockItemForm,
   showEventForm: showStockEventForm,
   hideEventForm: hideStockEventForm,
+  showIdPhotoForm: showIdPhotoForm,
+  hideIdPhotoForm: hideIdPhotoForm,
+  confirmIdPhotoDelete: confirmIdPhotoDelete,
+  cancelIdPhotoDelete: cancelIdPhotoDelete,
+  deleteIdPhoto: deleteIdPhoto,
+  showScanPhotoForm: showScanPhotoForm,
+  hideScanPhotoForm: hideScanPhotoForm,
+  confirmScanPhotoDelete: confirmScanPhotoDelete,
+  cancelScanPhotoDelete: cancelScanPhotoDelete,
+  deleteScanPhoto: deleteScanPhoto,
 };
 
 export default connect(mapStateToProps, actionCreators)(StockDetail);

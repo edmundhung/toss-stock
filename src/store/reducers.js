@@ -16,7 +16,9 @@ export const getDeletingStockCode = state => stockModule.getDeletingStockCode(st
 export const isShowingStockItemForm = state => stockModule.isShowingItemForm(state.stock);
 export const isShowingStockEventForm = state => stockModule.isShowingEventForm(state.stock);
 export const isConfirmingStockDelete = state => stockModule.isConfirmingDelete(state.stock);
-
 export const getStockByCode = state => stockModule.getStockByCode(state.stock);
-
+export const isShowingIdPhotoForm = state => stockModule.isShowingIdPhotoForm(state.stock);
+export const isShowingScanPhotoForm = state => stockModule.isShowingScanPhotoForm(state.stock);
+export const isConfirmingDeleteIdPhoto = state => stockModule.isConfirmingDeleteIdPhoto(state.stock);
+export const isConfirmingDeleteScanPhoto = state => stockModule.isConfirmingDeleteScanPhoto(state.stock);
 export default reducer;

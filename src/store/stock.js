@@ -2,12 +2,24 @@ export const CREATE = 'stock/CREATE';
 export const UPDATE_ITEM = 'stock/UPDATE_ITEM';
 export const UPDATE_EVENT = 'stock/UPDATE_EVENT';
 export const DELETE = 'stock/DELETE';
+export const CREATE_ID_PHOTO = 'stock/CREATE_ID_PHOTO';
+export const DELETE_ID_PHOTO = 'stock/DELETE_ID_PHOTO';
+export const CREATE_SCAN_PHOTO = 'stock/CREATE_SCAN_PHOTO';
+export const DELETE_SCAN_PHOTO = 'stock/DELETE_SCAN_PHOTO';
 export const ITEM_FORM_SHOW = 'stock/ITEM_FORM_SHOW';
 export const ITEM_FORM_HIDE = 'stock/ITEM_FORM_HIDE';
 export const EVENT_FORM_SHOW = 'stock/EVENT_FORM_SHOW';
 export const EVENT_FORM_HIDE = 'stock/EVENT_FORM_HIDE';
 export const DELETE_CONFIRM = 'stock/DELETE_CONFIRM';
 export const DELETE_CANCEL = 'stock/DELETE_CANCEL';
+export const ID_PHOTO_FORM_SHOW = 'stock/ID_PHOTO_FORM_SHOW';
+export const ID_PHOTO_FORM_HIDE = 'stock/ID_PHOTO_FORM_HIDE';
+export const ID_PHOTO_DELETE_CONFIRM = 'stock/ID_PHOTO_DELETE_CONFIRM';
+export const ID_PHOTO_DELETE_CANCEL = 'stock/ID_PHOTO_DELETE_CANCEL';
+export const SCAN_PHOTO_FORM_SHOW = 'stock/SCAN_PHOTO_FORM_SHOW';
+export const SCAN_PHOTO_FORM_HIDE = 'stock/SCAN_PHOTO_FORM_HIDE';
+export const SCAN_PHOTO_DELETE_CONFIRM = 'stock/SCAN_PHOTO_DELETE_CONFIRM';
+export const SCAN_PHOTO_DELETE_CANCEL = 'stock/SCAN_PHOTO_DELETE_CANCEL';
 
 export function createStock(stock) {
   return {
@@ -49,6 +61,44 @@ export function deleteStock(code) {
   };
 }
 
+export function createIdPhoto(photo) {
+  return {
+    type: CREATE_ID_PHOTO,
+    payload: {
+      photo,
+      timestamp: Date.now(),
+    },
+  };
+}
+
+export function deleteIdPhoto() {
+  return {
+    type: DELETE_ID_PHOTO,
+    payload: {
+      timestamp: Date.now(),
+    },
+  };
+}
+
+export function createScanPhoto(photo) {
+  return {
+    type: CREATE_SCAN_PHOTO,
+    payload: {
+      photo,
+      timestamp: Date.now(),
+    },
+  };
+}
+
+export function deleteScanPhoto() {
+  return {
+    type: DELETE_SCAN_PHOTO,
+    payload: {
+      timestamp: Date.now(),
+    },
+  };
+}
+
 export function showStockItemForm(code) {
   return {
     type: ITEM_FORM_SHOW,
@@ -85,6 +135,64 @@ export function confirmStockDelete(code) {
 export function cancelStockDelete() {
   return {
     type: DELETE_CANCEL,
+  };
+}
+
+export function showIdPhotoForm(code) {
+  return {
+    type: ID_PHOTO_FORM_SHOW,
+    payload: code,
+  };
+}
+
+export function hideIdPhotoForm() {
+  return {
+    type: ID_PHOTO_FORM_HIDE,
+  };
+}
+
+export function confirmIdPhotoDelete(code, photoId) {
+  return {
+    type: ID_PHOTO_DELETE_CONFIRM,
+    payload: {
+      code,
+      photoId,
+    },
+  };
+}
+
+export function cancelIdPhotoDelete() {
+  return {
+    type: ID_PHOTO_DELETE_CANCEL,
+  };
+}
+
+export function showScanPhotoForm(code) {
+  return {
+    type: SCAN_PHOTO_FORM_SHOW,
+    payload: code,
+  };
+}
+
+export function hideScanPhotoForm() {
+  return {
+    type: SCAN_PHOTO_FORM_HIDE,
+  };
+}
+
+export function confirmScanPhotoDelete(code, photoId) {
+  return {
+    type: SCAN_PHOTO_DELETE_CONFIRM,
+    payload: {
+      code,
+      photoId,
+    },
+  };
+}
+
+export function cancelScanPhotoDelete() {
+  return {
+    type: SCAN_PHOTO_DELETE_CANCEL,
   };
 }
 
@@ -147,7 +255,8 @@ export const initialState = {
 
   // model
   openingModel: null,
-  relatedStockCode: null
+  relatedStockCode: null,
+  relatedPhotoId: null,
 };
 
 export function getStocks(state) {
@@ -176,6 +285,22 @@ export function isShowingEventForm(state) {
 
 export function isConfirmingDelete(state) {
   return state.openingModel === 'DELETE';
+}
+
+export function isShowingIdPhotoForm(state) {
+  return state.openingModel === 'ID_PHOTO';
+}
+
+export function isShowingScanPhotoForm(state) {
+  return state.openingModel === 'SCAN_PHOTO';
+}
+
+export function isConfirmingDeleteIdPhoto(state) {
+  return state.openingModel === 'ID_PHOTO_DELETE';
+}
+
+export function isConfirmingDeleteScanPhoto(state) {
+  return state.openingModel === 'SCAN_PHOTO_DELETE';
 }
 
 export function getDeletingStockCode(state) {
@@ -271,6 +396,78 @@ export default function reducer(state = initialState, action) {
         relatedStockCode: initialState.relatedStockCode,
       };
     }
+    case CREATE_ID_PHOTO: {
+      const { photo, timestamp } = action.payload;
+      const stock = state.stockByCode[state.relatedStockCode];
+      const stockByCode = {
+        ...state.stockByCode,
+        [stock.code]: {
+          ...stock,
+          photos: (stock.photos || []).concat({ ...photo, photoId: timestamp }),
+        },
+      };
+
+      return {
+        ...state,
+        stockByCode,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+      };
+    }
+    case DELETE_ID_PHOTO: {
+      const photoId = state.relatedPhotoId;
+      const stock = state.stockByCode[state.relatedStockCode];
+      const stockByCode = {
+        ...state.stockByCode,
+        [stock.code]: {
+          ...stock,
+          photos: (stock.photos || []).filter(photo => photo.photoId !== photoId),
+        },
+      };
+
+      return {
+        ...state,
+        stockByCode,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+      };
+    }
+    case CREATE_SCAN_PHOTO: {
+      const { photo, timestamp } = action.payload;
+      const stock = state.stockByCode[state.relatedStockCode];
+      const stockByCode = {
+        ...state.stockByCode,
+        [stock.code]: {
+          ...stock,
+          scannedImages: (stock.scannedImages || []).concat({ ...photo, photoId: timestamp }),
+        },
+      };
+
+      return {
+        ...state,
+        stockByCode,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+      };
+    }
+    case DELETE_SCAN_PHOTO: {
+      const photoId = state.relatedPhotoId;
+      const stock = state.stockByCode[state.relatedStockCode];
+      const stockByCode = {
+        ...state.stockByCode,
+        [stock.code]: {
+          ...stock,
+          scannedImages: (stock.scannedImages || []).filter(scannedImage => scannedImage.scannedImageId !== photoId),
+        },
+      };
+
+      return {
+        ...state,
+        stockByCode,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+      };
+    }
     case ITEM_FORM_SHOW: {
       return {
         ...state,
@@ -278,18 +475,24 @@ export default function reducer(state = initialState, action) {
         relatedStockCode: action.payload || state.relatedStockCode
       };
     }
-    case DELETE_CANCEL:
-    case ITEM_FORM_HIDE:
-    case EVENT_FORM_HIDE:
-      return {
-        ...state,
-        openingModel: initialState.openingModel,
-        relatedStockCode: initialState.relatedStockCode,
-      };
     case EVENT_FORM_SHOW: {
       return {
         ...state,
         openingModel: 'EVENT',
+        relatedStockCode: action.payload,
+      };
+    }
+    case ID_PHOTO_FORM_SHOW: {
+      return {
+        ...state,
+        openingModel: 'ID_PHOTO',
+        relatedStockCode: action.payload,
+      };
+    }
+    case SCAN_PHOTO_FORM_SHOW: {
+      return {
+        ...state,
+        openingModel: 'SCAN_PHOTO',
         relatedStockCode: action.payload,
       };
     }
@@ -298,6 +501,42 @@ export default function reducer(state = initialState, action) {
         ...state,
         openingModel: 'DELETE',
         relatedStockCode: action.payload,
+      };
+    }
+    case ID_PHOTO_DELETE_CONFIRM: {
+      return {
+        ...state,
+        openingModel: 'ID_PHOTO_DELETE',
+        relatedStockCode: action.payload.code,
+        relatedPhotoId: action.payload.photoId,
+      };
+    }
+    case SCAN_PHOTO_DELETE_CONFIRM: {
+      return {
+        ...state,
+        openingModel: 'SCAN_PHOTO_DELETE',
+        relatedStockCode: action.payload.code,
+        relatedPhotoId: action.payload.photoId,
+      };
+    }
+    case ITEM_FORM_HIDE:
+    case EVENT_FORM_HIDE:
+    case ID_PHOTO_FORM_HIDE:
+    case SCAN_PHOTO_FORM_HIDE:
+    case DELETE_CANCEL: {
+      return {
+        ...state,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+      };
+    }
+    case ID_PHOTO_DELETE_CANCEL:
+    case SCAN_PHOTO_DELETE_CANCEL: {
+      return {
+        ...state,
+        openingModel: initialState.openingModel,
+        relatedStockCode: initialState.relatedStockCode,
+        relatedPhotoId: initialState.relatedPhotoId,
       };
     }
     default:
