@@ -12,21 +12,33 @@ class StockPhotoForm extends React.PureComponent {
     this.updateHeight = this.updateHeight.bind(this);
     this.reset = this.reset.bind(this);
 
-    this.state = this.getInitialFormState();
+    this.state = this.getInitialFormState(props);
   }
 
-  getInitialFormState() {
-    return {
-      photoId: '',
-      name: '',
-      nameError: '',
-      length: '',
-      lengthError: '',
-      width: '',
-      widthError: '',
-      height: '',
-      heightError: '',
-    };
+  getInitialFormState(props) {
+    const { type } = props;
+
+    if (type === "SCAN_PHOTO") {
+      const defaultState = {
+        photoId: '',
+        name: '',
+        nameError: '',
+      };
+    } else {
+      const defaultState = {
+        photoId: '',
+        name: '',
+        nameError: '',
+        length: '',
+        lengthError: '',
+        width: '',
+        widthError: '',
+        height: '',
+        heightError: '',
+      };
+    }
+
+    return defaultState;
   }
 
   reset() {
@@ -38,54 +50,84 @@ class StockPhotoForm extends React.PureComponent {
   handleSubmit(event) {
     event.preventDefault();
 
-    const photo = {
-      photoId: Date.now(),
-      name: this.state.name.trim(),
-      length: this.state.length.trim(),
-      width: this.state.width.trim(),
-      height: this.state.height.trim(),
-    }
+    if (this.props === "SCAN_PHOTO") {
+      const photo = {
+        photoId: Date.now(),
+        name: this.state.name.trim(),
+      }
 
-    let isValid = true;
-    let nameError;
-    let lengthError;
-    let widthError;
-    let heightError;
+      let isValid = true;
+      let nameError;
 
-    // validation
-    if (photo.name === '') {
-      isValid = false;
-      nameError = 'Name is required.';
-    } else if (isNaN(photo.length)) {
-      isValid = false;
-      lengthError = 'Length must be a number.';
-    } else if (photo.length < 0) {
-      isValid = false;
-      lengthError = 'Length must be positive.';
-    } else if (isNaN(photo.width)) {
-      isValid = false;
-      widthError = 'Width must be a number.';
-    } else if (photo.width < 0) {
-      isValid = false;
-      widthError = 'Width must be positive.';
-    } else if (isNaN(photo.height)) {
-      isValid = false;
-      heightError = 'Height must be a number.';
-    } else if (photo.height < 0) {
-      isValid = false;
-      heightError = 'Height must be positive.';
-    }
+      // validation
+      if (photo.name === '') {
+        isValid = false;
+        nameError = 'Name is required.';
+      } else if (isNaN(photo.length)) {
+        isValid = false;
+        lengthError = 'Length must be a number.';
+      }
 
-    if (!isValid) {
-      this.setState(() => ({
-        submitted: true,
-        nameError,
-        lengthError,
-        widthError,
-        heightError,
-      }));
+      if (!isValid) {
+        this.setState(() => ({
+          submitted: true,
+          nameError,
+        }));
 
-      return;
+        return;
+      }
+
+    } else {
+      const photo = {
+        photoId: Date.now(),
+        name: this.state.name.trim(),
+        length: this.state.length.trim(),
+        width: this.state.width.trim(),
+        height: this.state.height.trim(),
+      }
+
+      let isValid = true;
+      let nameError;
+      let lengthError;
+      let widthError;
+      let heightError;
+
+      // validation
+      if (photo.name === '') {
+        isValid = false;
+        nameError = 'Name is required.';
+      } else if (isNaN(photo.length)) {
+        isValid = false;
+        lengthError = 'Length must be a number.';
+      } else if (photo.length < 0) {
+        isValid = false;
+        lengthError = 'Length must be positive.';
+      } else if (isNaN(photo.width)) {
+        isValid = false;
+        widthError = 'Width must be a number.';
+      } else if (photo.width < 0) {
+        isValid = false;
+        widthError = 'Width must be positive.';
+      } else if (isNaN(photo.height)) {
+        isValid = false;
+        heightError = 'Height must be a number.';
+      } else if (photo.height < 0) {
+        isValid = false;
+        heightError = 'Height must be positive.';
+      }
+
+      if (!isValid) {
+        this.setState(() => ({
+          submitted: true,
+          nameError,
+          lengthError,
+          widthError,
+          heightError,
+        }));
+
+        return;
+      }
+
     }
 
     this.props.onSubmit(photo);
@@ -118,17 +160,26 @@ class StockPhotoForm extends React.PureComponent {
 
 
   render() {
-    const {
-      submitted,
-      name,
-      nameError,
-      length,
-      lengthError,
-      width,
-      widthError,
-      height,
-      heightError,
-    } = this.state;
+
+    if (this.props === "SCAN_PHOTO") {
+      const {
+        submitted,
+        name,
+        nameError,
+      } = this.state;
+    } else {
+      const {
+        submitted,
+        name,
+        nameError,
+        length,
+        lengthError,
+        width,
+        widthError,
+        height,
+        heightError,
+      } = this.state;
+    }
 
     return (
       <form className="clearfix" onSubmit={this.handleSubmit}>

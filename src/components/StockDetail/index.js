@@ -160,6 +160,7 @@ class StockDetail extends React.PureComponent {
                           </Modal.Header>
                           <Modal.Body>
                             <StockPhotoForm
+                              type="ID_PHOTO"
                               onSubmit={createIdPhoto}
                             />
                           </Modal.Body>
@@ -222,6 +223,7 @@ class StockDetail extends React.PureComponent {
                           </Modal.Header>
                           <Modal.Body>
                             <StockPhotoForm
+                              type="SCAN_PHOTO"
                               onSubmit={createScanPhoto}
                             />
                           </Modal.Body>
