@@ -145,44 +145,57 @@ class StockPhotoForm extends React.PureComponent {
             {submitted && nameError}
           </div>
         </div>
-        <div className={classNames('form-group', { 'has-error': submitted && lengthError })}>
-          <label htmlFor="stock-id-photo-length">Measurements(cm):</label>
-          <input
-            id="stock-id-photo-length"
-            className="form-control"
-            type="text"
-            value={length}
-            onChange={this.updateLength}
-            placeholder="Length"
-          />
+        <div className={classNames('form-group', { 'has-error': submitted && (lengthError || widthError || heightError)})}>
+          <label htmlFor="stock-id-photo-length">Measurements:</label>
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xs-3">
+                <input
+                  id="stock-id-photo-length"
+                  className="form-control"
+                  type="text"
+                  value={length}
+                  onChange={this.updateLength}
+                  placeholder="Length"
+                />
+              </div>
+              <div className="col-xs-1 ">
+                <p>x</p>
+              </div>
+              <div className="col-xs-3">
+                <input
+                  id="stock-id-photo-width"
+                  className="form-control"
+                  type="text"
+                  value={width}
+                  onChange={this.updateWidth}
+                  placeholder="Width"
+                />
+              </div>
+              <div className="col-xs-1">
+                <p>x</p>
+              </div>
+              <div className="col-xs-3">
+                <input
+                  id="stock-id-photo-height"
+                  className="form-control"
+                  type="text"
+                  value={height}
+                  onChange={this.updateHeight}
+                  placeholder="Height"
+                />
+              </div>
+              <div className="col-xs-1">
+                <p>cm</p>
+              </div>
+            </div>
+          </div>
           <div className="help-block">
             {submitted && lengthError}
           </div>
-        </div>
-        <div>x</div>
-        <div className={classNames('form-group', { 'has-error': submitted && widthError })}>
-          <input
-            id="stock-id-photo-width"
-            className="form-control"
-            type="text"
-            value={width}
-            onChange={this.updateWidth}
-            placeholder="Width"
-          />
           <div className="help-block">
             {submitted && widthError}
           </div>
-        </div>
-        <div>x</div>
-        <div className={classNames('form-group', { 'has-error': submitted && heightError })}>
-          <input
-            id="stock-id-photo-height"
-            className="form-control"
-            type="text"
-            value={height}
-            onChange={this.updateHeight}
-            placeholder="Height"
-          />
           <div className="help-block">
             {submitted && heightError}
           </div>
