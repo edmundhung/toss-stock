@@ -1,47 +1,95 @@
 import React from 'react';
+import classNames from 'classnames';
 import './style.css';
 
 class StockPhotoForm extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.updateIdPhotoName = this.updateIdPhotoName.bind(this);
-    this.updateIdPhotoWidth = this.updateIdPhotoWidth.bind(this);
-    this.updateIdPhotoHeight = this.updateIdPhotoHeight.bind(this);
-    this.updateIdPhotoLength = this.updateIdPhotoLength.bind(this);
+    this.updateName = this.updateName.bind(this);
+    this.updateLength = this.updateLength.bind(this);
+    this.updateWidth = this.updateWidth.bind(this);
+    this.updateHeight = this.updateHeight.bind(this);
+    this.reset = this.reset.bind(this);
 
     this.state = this.getInitialFormState();
   }
 
   getInitialFormState() {
     return {
-      idPhotoName: '',
-      idPhotoWidth: '',
-      idPhotoHeight: '',
-      idPhotoLength: '',
+      photoId: '',
+      name: '',
+      nameError: '',
+      length: '',
+      lengthError: '',
+      width: '',
+      widthError: '',
+      height: '',
+      heightError: '',
     };
+  }
+
+  reset() {
+    this.setState(
+      this.getInitialFormState()
+    );
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const code = this.state.code.trim();
-    // const receivedDate = this.state.receivedDate.trim();
-    const condition = this.state.condition.trim();
-    const status = this.state.status.trim();
+    const photo = {
+      photoId: Date.now(),
+      name: this.state.name.trim(),
+      length: this.state.length.trim(),
+      width: this.state.width.trim(),
+      height: this.state.height.trim(),
+    }
+
+    let isValid = true;
+    let nameError;
+    let lengthError;
+    let widthError;
+    let heightError;
 
     // validation
-    if (code === '' || condition === '' || status === '') {
+    if (photo.name === '') {
+      isValid = false;
+      nameError = 'Name is required.';
+    } else if (isNaN(photo.length)) {
+      isValid = false;
+      lengthError = 'Length must be a number.';
+    } else if (photo.length < 0) {
+      isValid = false;
+      lengthError = 'Length must be positive.';
+    } else if (isNaN(photo.width)) {
+      isValid = false;
+      widthError = 'Width must be a number.';
+    } else if (photo.width < 0) {
+      isValid = false;
+      widthError = 'Width must be positive.';
+    } else if (isNaN(photo.height)) {
+      isValid = false;
+      heightError = 'Height must be a number.';
+    } else if (photo.height < 0) {
+      isValid = false;
+      heightError = 'Height must be positive.';
+    }
+
+    if (!isValid) {
+      this.setState(() => ({
+        submitted: true,
+        nameError,
+        lengthError,
+        widthError,
+        heightError,
+      }));
+
       return;
     }
 
-    this.props.onSubmit({
-      code,
-      condition,
-      status,
-    });
-
-    this.setState(this.getInitialFormState());
+    this.props.onSubmit(photo);
+    this.reset();
   }
 
   handleChange(name, value) {
@@ -52,71 +100,97 @@ class StockPhotoForm extends React.PureComponent {
     }
   }
 
-  updateIdPhotoName(event) {
-    this.handleChange('idPhotoName', event.target.value);
+  updateName(event) {
+    this.handleChange('name', event.target.value);
   }
 
-  updateIdPhotoWidth(event) {
-    this.handleChange('idPhotoWidth', event.target.value);
+  updateLength(event) {
+    this.handleChange('length', event.target.value);
   }
 
-  updateIdPhotoHeight(event) {
-    this.handleChange('idPhotoHeight', event.target.value);
+  updateWidth(event) {
+    this.handleChange('width', event.target.value);
   }
 
-  updateIdPhotoLength(event) {
-    this.handleChange('idPhotoLength', event.target.value);
+  updateHeight(event) {
+    this.handleChange('height', event.target.value);
   }
+
 
   render() {
     const {
-      idPhotoName,
-      idPhotoWidth,
-      idPhotoHeight,
-      idPhotoLength,
+      submitted,
+      name,
+      nameError,
+      length,
+      lengthError,
+      width,
+      widthError,
+      height,
+      heightError,
     } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <div className="form-group">
+      <form className="clearfix" onSubmit={this.handleSubmit}>
+        <div className={classNames('form-group', { 'has-error': submitted && nameError })}>
           <label htmlFor="stock-id-photo-name">File name of photo:</label>
           <input
             id="stock-id-photo-name"
             className="form-control"
             type="text"
-            value={idPhotoName}
-            onChange={this.updateIdPhotoName}
+            value={name}
+            onChange={this.updateName}
           />
-          <label htmlFor="stock-id-photo-width">Measurements(cm):</label>
-          <input
-            id="stock-id-photo-width"
-            className="form-control"
-            type="text"
-            value={idPhotoWidth}
-            onChange={this.updateIdPhotoWidth}
-            placeholder="Weight"
-          />
-          <span>x</span>
-          <input
-            id="stock-id-photo-height"
-            className="form-control"
-            type="text"
-            value={idPhotoHeight}
-            onChange={this.updateIdPhotoHeight}
-            placeholder="Height"
-          />
-          <span>x</span>
+          <div className="help-block">
+            {submitted && nameError}
+          </div>
+        </div>
+        <div className={classNames('form-group', { 'has-error': submitted && lengthError })}>
+          <label htmlFor="stock-id-photo-length">Measurements(cm):</label>
           <input
             id="stock-id-photo-length"
             className="form-control"
             type="text"
-            value={idPhotoLength}
-            onChange={this.updateIdPhotoLength}
+            value={length}
+            onChange={this.updateLength}
             placeholder="Length"
           />
+          <div className="help-block">
+            {submitted && lengthError}
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-        <button type="reset" className="btn btn-default">Reset</button>
+        <div>x</div>
+        <div className={classNames('form-group', { 'has-error': submitted && widthError })}>
+          <input
+            id="stock-id-photo-width"
+            className="form-control"
+            type="text"
+            value={width}
+            onChange={this.updateWidth}
+            placeholder="Width"
+          />
+          <div className="help-block">
+            {submitted && widthError}
+          </div>
+        </div>
+        <div>x</div>
+        <div className={classNames('form-group', { 'has-error': submitted && heightError })}>
+          <input
+            id="stock-id-photo-height"
+            className="form-control"
+            type="text"
+            value={height}
+            onChange={this.updateHeight}
+            placeholder="Height"
+          />
+          <div className="help-block">
+            {submitted && heightError}
+          </div>
+        </div>
+        <div className="pull-right">
+          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>
+        </div>
       </form>
     );
   }

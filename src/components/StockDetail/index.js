@@ -67,11 +67,13 @@ class StockDetail extends React.PureComponent {
       hideIdPhotoForm,
       confirmIdPhotoDelete,
       cancelIdPhotoDelete,
+      createIdPhoto,
       deleteIdPhoto,
       showScanPhotoForm,
       hideScanPhotoForm,
       confirmScanPhotoDelete,
       cancelScanPhotoDelete,
+      createScanPhoto,
       deleteScanPhoto,
     } = this.props;
 
@@ -157,16 +159,18 @@ class StockDetail extends React.PureComponent {
                             <Modal.Title>Add ID photo for stock #{stock.code}</Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
-                            <StockPhotoForm />
+                            <StockPhotoForm
+                              onSubmit={createIdPhoto}
+                            />
                           </Modal.Body>
                         </Modal>
                       </th>
                     </tr>
                     <tr>
                       <th>name</th>
+                      <th>length</th>
                       <th>width</th>
                       <th>height</th>
-                      <th>length</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -174,9 +178,9 @@ class StockDetail extends React.PureComponent {
                     {(stock.photos || []).map(photo => (
                       <tr key={photo.photoId}>
                         <td>{photo.name}</td>
+                        <td>{photo.length}</td>
                         <td>{photo.width}</td>
                         <td>{photo.height}</td>
-                        <td>{photo.length}</td>
                         <td>
                           <button
                             type="button"
@@ -217,7 +221,9 @@ class StockDetail extends React.PureComponent {
                             <Modal.Title>Add scanned image for stock #{stock.code}</Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
-                            <StockPhotoForm />
+                            <StockPhotoForm
+                              onSubmit={createScanPhoto}
+                            />
                           </Modal.Body>
                         </Modal>
                       </th>
@@ -365,11 +371,13 @@ export const actionCreators = {
   hideIdPhotoForm: hideIdPhotoForm,
   confirmIdPhotoDelete: confirmIdPhotoDelete,
   cancelIdPhotoDelete: cancelIdPhotoDelete,
+  createIdPhoto: createIdPhoto,
   deleteIdPhoto: deleteIdPhoto,
   showScanPhotoForm: showScanPhotoForm,
   hideScanPhotoForm: hideScanPhotoForm,
   confirmScanPhotoDelete: confirmScanPhotoDelete,
   cancelScanPhotoDelete: cancelScanPhotoDelete,
+  createScanPhoto: createScanPhoto,
   deleteScanPhoto: deleteScanPhoto,
 };
 
