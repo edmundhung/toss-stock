@@ -23,6 +23,45 @@ import './style.css';
 class StockList extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
+    this.exportStocks = this.exportStocks.bind(this);
+    this.convertObjectsToString = this.convertObjectsToString.bind(this);
+  }
+
+  exportStocks() {
+    const { stocks } = this.props;
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+
+    const stocksInJSON = JSON.stringify(stocks);
+    const stocksInString = this.convertObjectsToString(stocksInJSON);
+
+    csvContent += stocksInString;
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "my_data.csv");
+    document.body.appendChild(link); // Required for FF
+
+    link.click(); // This will download the data file named "my_data.csv".
+  }
+
+  convertObjectsToString(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+        if (line != '') line += ','
+
+        line += array[i][index];
+      }
+
+      str += line + '\r\n';
+    }
+
+    return str;
   }
 
   render() {
@@ -54,6 +93,9 @@ class StockList extends React.PureComponent {
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="pull-right">
+              <button type="button" className="btn btn-default" onClick={this.exportStocks}>
+                Export stocks
+              </button>
               <button type="button" className="btn btn-default" onClick={() => showItemForm()}>
                 Add stock
               </button>
