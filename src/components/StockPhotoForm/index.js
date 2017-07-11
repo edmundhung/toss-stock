@@ -12,23 +12,21 @@ class StockPhotoForm extends React.PureComponent {
     this.updateHeight = this.updateHeight.bind(this);
     this.reset = this.reset.bind(this);
 
-    this.state = this.getInitialFormState(props);
+    this.state = this.getInitialFormState();
   }
 
-  getInitialFormState(props) {
-    const { type } = props;
+  getInitialFormState() {
+    const isScanPhoto = this.props.type === "SCAN_PHOTO";
 
-    if (type === "SCAN_PHOTO") {
-      const defaultState = {
-        photoId: '',
-        name: '',
-        nameError: '',
-      };
-    } else {
-      const defaultState = {
-        photoId: '',
-        name: '',
-        nameError: '',
+    let defaultState = {
+      photoId: '',
+      name: '',
+      nameError: '',
+    };
+
+    if (!isScanPhoto) {
+      defaultState = {
+        ...defaultState,
         length: '',
         lengthError: '',
         width: '',
@@ -50,84 +48,61 @@ class StockPhotoForm extends React.PureComponent {
   handleSubmit(event) {
     event.preventDefault();
 
-    if (this.props === "SCAN_PHOTO") {
-      const photo = {
-        photoId: Date.now(),
-        name: this.state.name.trim(),
-      }
+    const isScanPhoto = this.props.type === "SCAN_PHOTO";
 
-      let isValid = true;
-      let nameError;
+    let photo = {
+      name: this.state.name.trim(),
+    };
 
-      // validation
-      if (photo.name === '') {
-        isValid = false;
-        nameError = 'Name is required.';
-      } else if (isNaN(photo.length)) {
-        isValid = false;
-        lengthError = 'Length must be a number.';
-      }
-
-      if (!isValid) {
-        this.setState(() => ({
-          submitted: true,
-          nameError,
-        }));
-
-        return;
-      }
-
-    } else {
-      const photo = {
-        photoId: Date.now(),
-        name: this.state.name.trim(),
+    if (!isScanPhoto) {
+      photo = {
+        ...photo,
         length: this.state.length.trim(),
         width: this.state.width.trim(),
         height: this.state.height.trim(),
-      }
+      };
+    }
 
-      let isValid = true;
-      let nameError;
-      let lengthError;
-      let widthError;
-      let heightError;
+    let isValid = true;
+    let nameError;
+    let lengthError;
+    let widthError;
+    let heightError;
 
-      // validation
-      if (photo.name === '') {
-        isValid = false;
-        nameError = 'Name is required.';
-      } else if (isNaN(photo.length)) {
-        isValid = false;
-        lengthError = 'Length must be a number.';
-      } else if (photo.length < 0) {
-        isValid = false;
-        lengthError = 'Length must be positive.';
-      } else if (isNaN(photo.width)) {
-        isValid = false;
-        widthError = 'Width must be a number.';
-      } else if (photo.width < 0) {
-        isValid = false;
-        widthError = 'Width must be positive.';
-      } else if (isNaN(photo.height)) {
-        isValid = false;
-        heightError = 'Height must be a number.';
-      } else if (photo.height < 0) {
-        isValid = false;
-        heightError = 'Height must be positive.';
-      }
+    // validation
+    if (photo.name === '') {
+      isValid = false;
+      nameError = 'Name is required.';
+    } else if (!isScanPhoto && isNaN(photo.length)) {
+      isValid = false;
+      lengthError = 'Length must be a number.';
+    } else if (!isScanPhoto && photo.length < 0) {
+      isValid = false;
+      lengthError = 'Length must be positive.';
+    } else if (!isScanPhoto && isNaN(photo.width)) {
+      isValid = false;
+      widthError = 'Width must be a number.';
+    } else if (!isScanPhoto && photo.width < 0) {
+      isValid = false;
+      widthError = 'Width must be positive.';
+    } else if (!isScanPhoto && isNaN(photo.height)) {
+      isValid = false;
+      heightError = 'Height must be a number.';
+    } else if (!isScanPhoto && photo.height < 0) {
+      isValid = false;
+      heightError = 'Height must be positive.';
+    }
 
-      if (!isValid) {
-        this.setState(() => ({
-          submitted: true,
-          nameError,
-          lengthError,
-          widthError,
-          heightError,
-        }));
+    if (!isValid) {
+      this.setState(() => ({
+        submitted: true,
+        nameError,
+        lengthError,
+        widthError,
+        heightError,
+      }));
 
-        return;
-      }
-
+      return;
     }
 
     this.props.onSubmit(photo);
@@ -158,105 +133,100 @@ class StockPhotoForm extends React.PureComponent {
     this.handleChange('height', event.target.value);
   }
 
-
   render() {
+   const {
+     props: {
+       type,
+     },
+     state: {
+       submitted,
+       name,
+       nameError,
+       length,
+       lengthError,
+       width,
+       widthError,
+       height,
+       heightError,
+     }
+   } = this;
 
-    if (this.props === "SCAN_PHOTO") {
-      const {
-        submitted,
-        name,
-        nameError,
-      } = this.state;
-    } else {
-      const {
-        submitted,
-        name,
-        nameError,
-        length,
-        lengthError,
-        width,
-        widthError,
-        height,
-        heightError,
-      } = this.state;
-    }
-
-    return (
-      <form className="clearfix" onSubmit={this.handleSubmit}>
-        <div className={classNames('form-group', { 'has-error': submitted && nameError })}>
-          <label htmlFor="stock-id-photo-name">File name of photo:</label>
-          <input
-            id="stock-id-photo-name"
-            className="form-control"
-            type="text"
-            value={name}
-            onChange={this.updateName}
-          />
-          <div className="help-block">
-            {submitted && nameError}
-          </div>
-        </div>
-        <div className={classNames('form-group', { 'has-error': submitted && (lengthError || widthError || heightError)})}>
-          <label htmlFor="stock-id-photo-length">Measurements:</label>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xs-3">
-                <input
-                  id="stock-id-photo-length"
-                  className="form-control"
-                  type="text"
-                  value={length}
-                  onChange={this.updateLength}
-                  placeholder="Length"
-                />
-              </div>
-              <div className="col-xs-1 ">
-                <p>x</p>
-              </div>
-              <div className="col-xs-3">
-                <input
-                  id="stock-id-photo-width"
-                  className="form-control"
-                  type="text"
-                  value={width}
-                  onChange={this.updateWidth}
-                  placeholder="Width"
-                />
-              </div>
-              <div className="col-xs-1">
-                <p>x</p>
-              </div>
-              <div className="col-xs-3">
-                <input
-                  id="stock-id-photo-height"
-                  className="form-control"
-                  type="text"
-                  value={height}
-                  onChange={this.updateHeight}
-                  placeholder="Height"
-                />
-              </div>
-              <div className="col-xs-1">
-                <p>cm</p>
-              </div>
-            </div>
-          </div>
-          <div className="help-block">
-            {submitted && lengthError}
-          </div>
-          <div className="help-block">
-            {submitted && widthError}
-          </div>
-          <div className="help-block">
-            {submitted && heightError}
-          </div>
-        </div>
-        <div className="pull-right">
-          <button type="submit" className="btn btn-primary">Submit</button>
-          <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>
-        </div>
-      </form>
-    );
+   return (
+     <form className="clearfix" onSubmit={this.handleSubmit}>
+       <div className={classNames('form-group', { 'has-error': submitted && nameError })}>
+         <label htmlFor="stock-id-photo-name">File name of photo:</label>
+         <input
+           id="stock-id-photo-name"
+           className="form-control"
+           type="text"
+           value={name}
+           onChange={this.updateName}
+         />
+         <div className="help-block">
+           {submitted && nameError}
+         </div>
+       </div>
+       {type === "ID_PHOTO" && (
+         <div className={classNames('form-group', { 'has-error': submitted && (lengthError || widthError || heightError)})}>
+           <label htmlFor="stock-id-photo-length">Measurements:</label>
+           <div className="row">
+             <div className="col-xs-3 no-right-padding">
+               <input
+                 id="stock-id-photo-length"
+                 className="form-control"
+                 type="text"
+                 value={length}
+                 onChange={this.updateLength}
+                 placeholder="Length"
+               />
+             </div>
+             <div className="col-xs-1">
+               <p>x</p>
+             </div>
+             <div className="col-xs-3 no-left-padding no-right-padding">
+               <input
+                 id="stock-id-photo-width"
+                 className="form-control"
+                 type="text"
+                 value={width}
+                 onChange={this.updateWidth}
+                 placeholder="Width"
+               />
+             </div>
+             <div className="col-xs-1">
+               <p>x</p>
+             </div>
+             <div className="col-xs-3 no-left-padding no-right-padding">
+               <input
+                 id="stock-id-photo-height"
+                 className="form-control"
+                 type="text"
+                 value={height}
+                 onChange={this.updateHeight}
+                 placeholder="Height"
+               />
+             </div>
+             <div className="col-xs-1">
+               <p>cm</p>
+             </div>
+           </div>
+           <div className="help-block">
+             {submitted && lengthError}
+           </div>
+           <div className="help-block">
+             {submitted && widthError}
+           </div>
+           <div className="help-block">
+             {submitted && heightError}
+           </div>
+         </div>
+       )}
+       <div className="pull-right">
+         <button type="submit" className="btn btn-primary">Submit</button>
+         <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>
+       </div>
+     </form>
+   );
   }
 }
 

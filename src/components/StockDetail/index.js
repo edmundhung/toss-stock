@@ -237,13 +237,13 @@ class StockDetail extends React.PureComponent {
                   </thead>
                   <tbody>
                     {(stock.scannedImages || []).map(scannedImage => (
-                      <tr key={scannedImage.scannedImageId}>
+                      <tr key={scannedImage.photoId}>
                         <td colSpan="4">{scannedImage.name}</td>
                         <td>
                           <button
                             type="button"
                             className="btn btn-danger btn-xs pull-right"
-                            onClick={() => confirmScanPhotoDelete(stock.code, scannedImage.scannedImageId)}
+                            onClick={() => confirmScanPhotoDelete(stock.code, scannedImage.photoId)}
                           >
                             Delete photo
                           </button>

@@ -1,5 +1,9 @@
-.col-xs-3 {
-  padding: 0;
+.no-left-padding {
+  padding-left: 0;
+}
+
+.no-right-padding {
+  padding-right: 0;
 }
 
 .col-xs-1 {

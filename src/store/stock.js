@@ -225,7 +225,7 @@ export const initialState = {
        ],
        scannedImages: [
          {
-           scannedImageId: '1',
+           photoId: '1',
            name: '1',
            length: 35,
            width: 12,
@@ -457,7 +457,7 @@ export default function reducer(state = initialState, action) {
         ...state.stockByCode,
         [stock.code]: {
           ...stock,
-          scannedImages: (stock.scannedImages || []).filter(scannedImage => scannedImage.scannedImageId !== photoId),
+          scannedImages: (stock.scannedImages || []).filter(scannedImage => scannedImage.photoId !== photoId),
         },
       };
 
