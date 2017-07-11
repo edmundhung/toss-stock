@@ -1,3 +1,14 @@
 body {
   margin-top: 20px;
 }
+
+.panel-body code {
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 90%;
+  color: #ffffff;
+  background-color: #464c52;
+  border-radius: 4px;
+  display: inline-block;
+}

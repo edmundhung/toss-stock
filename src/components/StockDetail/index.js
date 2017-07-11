@@ -281,50 +281,50 @@ class StockDetail extends React.PureComponent {
                 </Modal>
                 <h4>Event</h4>
                 <div className="row">
-                  <div className="col-xs-3">
+                  <div className="col-sm-6 col-md-3">
                     <div className="panel panel-default">
                       <div className="panel-heading">
                         <h4 className="panel-title">Name</h4>
                       </div>
                       <div className="panel-body">
                         {(stock.eventNames || []).map(eventName => (
-                          <span className="label label-default" key={JSON.stringify(eventName)}>{eventName}</span>
+                          <code key={JSON.stringify(eventName)}>{eventName}</code>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <div className="col-xs-3">
+                  <div className="col-sm-6 col-md-3">
                     <div className="panel panel-default">
                       <div className="panel-heading">
                         <h4 className="panel-title">Date</h4>
                       </div>
                       <div className="panel-body">
                         {(stock.eventDates || []).map(eventDate => (
-                          <span className="label label-default" key={JSON.stringify(eventDate)}>{eventDate}</span>
+                          <code key={JSON.stringify(eventDate)}>{eventDate}</code>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <div className="col-xs-3">
+                  <div className="col-sm-6 col-md-3">
                     <div className="panel panel-default">
                       <div className="panel-heading">
                         <h4 className="panel-title">Location</h4>
                       </div>
                       <div className="panel-body">
                         {(stock.eventLocations || []).map(eventLocation => (
-                          <span className="label label-default" key={JSON.stringify(eventLocation)}>{eventLocation}</span>
+                          <code key={JSON.stringify(eventLocation)}>{eventLocation}</code>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <div className="col-xs-3">
+                  <div className="col-sm-6 col-md-3">
                     <div className="panel panel-default">
                       <div className="panel-heading">
                         <h4 className="panel-title">People</h4>
                       </div>
                       <div className="panel-body">
                         {(stock.eventPeople || []).map(eventPerson => (
-                          <span className="label label-default" key={JSON.stringify(eventPerson)}>{eventPerson}</span>
+                          <code key={JSON.stringify(eventPerson)}>{eventPerson}</code>
                         ))}
                       </div>
                     </div>
