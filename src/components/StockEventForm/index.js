@@ -87,19 +87,18 @@ class StockEventForm extends React.PureComponent {
 
   render() {
     const {
-      props: {
-        code,
-      },
-      state: {
         eventNames,
         eventDates,
         eventLocations,
         eventPeople,
-      },
-    } = this;
+    } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="clearfix" onSubmit={this.handleSubmit}>
+        <div className="alert alert-dismissible alert-warning">
+          <h4>Tips!</h4>
+          <p>You can separate each item with a COMMA! For people, e.g. "Ms. Sin<b>,</b> Ms. Lam"</p>
+        </div>
         <div className="form-group">
           <label htmlFor="stock-event-names">Names:</label>
           <input
@@ -140,8 +139,10 @@ class StockEventForm extends React.PureComponent {
             onChange={this.updateEventPeople}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-        <button type="button" className="btn btn-default" onClick={this.reset}>Reset</button>
+        <div className="pull-right">
+          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="button" className="btn btn-default" onClick={this.reset}>Reset</button>
+        </div>
       </form>
     );
   }
