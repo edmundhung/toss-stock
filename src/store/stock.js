@@ -207,6 +207,8 @@ export const initialState = {
        location: 'Library',
        category: 'LB',
        classificationNum: 'LB0001',
+       sign: 'Checked',
+       remarks: 'Borrowed to F.1 classes',
        photos: [
          {
            photoId: '1',
@@ -227,13 +229,8 @@ export const initialState = {
          {
            photoId: '1',
            name: '1',
-           length: 35,
-           width: 12,
-           height: 13
          },
        ],
-       sign: 'Checked',
-       remarks: 'Borrowed to F.1 classes',
        eventNames: [
          'World Book Day',
          '2016',
@@ -250,7 +247,53 @@ export const initialState = {
          'Ms Sin',
          'Ms Lam',
        ],
-    }
+    },
+    '00002': {
+       code: '00002',
+       receivedDate: '2017-04-23',
+       description: 'World Book Day',
+       donor: 'Library team',
+       condition: 'Good',
+       location: 'Library',
+       category: 'LB',
+       classificationNum: 'LB0001',
+       sign: 'Checked',
+       remarks: 'Borrowed to F.1 classes',
+       photos: [
+         {
+           photoId: '1',
+           name: '1',
+           length: 35,
+           width: 12,
+           height: 13
+         },
+       ],
+       scannedImages: [
+         {
+           photoId: '1',
+           name: '1',
+         },
+         {
+           photoId: '1',
+           name: '1',
+         },
+       ],
+       eventNames: [
+         'World Book Day 2017',
+       ],
+       eventDates: [
+         '22/04/2016',
+         '23/04/2016',
+         '24/04/2016',
+       ],
+       eventLocations: [
+         'Library',
+       ],
+       eventPeople: [
+         'Ms Sin',
+         'Ms Lam',
+       ],
+    },
   },
 
   // model

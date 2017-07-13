@@ -98,7 +98,7 @@ class StockDetail extends React.PureComponent {
                     />
                   </Modal.Body>
                 </Modal>
-                <h4>Basic information</h4>
+                <h4>Basic Information</h4>
                 <div className="row">
                   <div className="col-xs-3">Code:</div>
                   <div className="col-xs-9">{stock.code}</div>
@@ -141,7 +141,7 @@ class StockDetail extends React.PureComponent {
                 </div>
               </div>
               <div className="well">
-                <h4>Related pictures</h4>
+                <h4>Related Images</h4>
                 <table className="table table-hover">
                   <thead>
                     <tr className="active">
@@ -279,7 +279,7 @@ class StockDetail extends React.PureComponent {
                     />
                   </Modal.Body>
                 </Modal>
-                <h4>Event</h4>
+                <h4>Event Tags</h4>
                 <div className="row">
                   <div className="col-sm-6 col-md-3">
                     <div className="panel panel-default">

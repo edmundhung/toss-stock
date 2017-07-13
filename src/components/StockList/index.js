@@ -33,7 +33,13 @@ class StockList extends React.PureComponent {
     let csvContent = "data:text/csv;charset=utf-8,";
 
     const stocksInJSON = JSON.stringify(stocks);
+
+    console.log("stocksINJSON", stocksInJSON);
+    console.log("csvContent", csvContent);
+
     const stocksInString = this.convertObjectsToString(stocksInJSON);
+    console.log("stocksInString", stocksInString);
+
 
     csvContent += stocksInString;
 
@@ -48,7 +54,28 @@ class StockList extends React.PureComponent {
 
   convertObjectsToString(objArray) {
     var array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+    console.log("array", array);
+    console.log("count", array[0].eventDates);
+
+    var tcat = ["Basic Information", "Related Pictures", "Event Tags"];
+    var thead = ["Code", "Date Received", "Description", "Donor", "Physical Condition", "Location", "Category",
+                "Classification No.", "Sign", "Remarks", "ID Photos", "Scanned Images", "Name", "Date", "Location", "People"];
+    var subthead = ["Name", "Length(cm)", "Width(cm)", "Height(cm)"];
+
+    var maxLengthPhotos = Math.max.apply(null, array.map(function(a){ return a.photos.length; }));
+    var maxLengthScannedImages = Math.max.apply(null, array.map(function(a){ return a.scannedImages.length; }));
+    var maxLengthEventDates = Math.max.apply(null, array.map(function(a){ return a.eventDates.length; }));
+    var maxLengthEventLocations = Math.max.apply(null, array.map(function(a){ return a.eventLocations.length; }));
+    var maxLengthEventNames = Math.max.apply(null, array.map(function(a){ return a.eventNames.length; }));
+    var maxLengthEventPeople = Math.max.apply(null, array.map(function(a){ return a.eventPeople.length; }));
+
+
     var str = '';
+    str += "Basic Information,,,,,,,,,,Related Picture,,Event Tags\r\n";
+    str += thead.map(function(h){ return h; });
+    str += "\r\n";
+
+    console.log("str", str);
 
     for (var i = 0; i < array.length; i++) {
       var line = '';
