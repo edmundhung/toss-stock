@@ -12,13 +12,17 @@ class StockItemForm extends React.PureComponent {
     this.updateCondition = this.updateCondition.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
+    this.updateSign = this.updateSign.bind(this);
+    this.updateRemarks = this.updateRemarks.bind(this);
     this.reset = this.reset.bind(this);
 
-    this.state = this.getInitialFormState();
+    this.state = this.getInitialFormState(props);
   }
 
-  getInitialFormState() {
-    return {
+  getInitialFormState(props) {
+    const { stock } = props;
+
+    const defaultState = {
       submitted: false,
       receivedDate: '',
       receivedDateError: '',
@@ -34,13 +38,32 @@ class StockItemForm extends React.PureComponent {
       categoryError: '',
       classificationNum: '0003',
       sign: 'Pending',
+      signError: '',
       remarks: 'N.A.',
+      remarksError: '',
+    };
+
+    if (stock === null) {
+      return defaultState;
+    }
+
+    return {
+      ...defaultState,
+      receivedDate: stock.receivedDate,
+      description: stock.description,
+      donor: stock.donor,
+      condition: stock.condition,
+      location: stock.location,
+      category: stock.category,
+      classificationNum: stock.classificationNum,
+      sign: stock.sign,
+      remarks: stock.remarks,
     };
   }
 
   reset() {
     this.setState(
-      this.getInitialFormState()
+      this.getInitialFormState(this.props)
     );
   }
 
@@ -67,6 +90,8 @@ class StockItemForm extends React.PureComponent {
     let conditionError;
     let locationError;
     let categoryError;
+    let signError;
+    let remarksError;
 
     // validation
     if (stock.receivedDate === '') {
@@ -89,6 +114,10 @@ class StockItemForm extends React.PureComponent {
       categoryError = 'Category is required.';
     }
 
+    if (stock.remarks === '') {
+      stock.remarks = "N.A.";
+    }
+
     if (!isValid) {
       this.setState(() => ({
         submitted: true,
@@ -98,6 +127,8 @@ class StockItemForm extends React.PureComponent {
         conditionError,
         locationError,
         categoryError,
+        signError,
+        remarksError,
       }));
 
       return;
@@ -139,6 +170,14 @@ class StockItemForm extends React.PureComponent {
     this.handleChange('category', event.target.value);
   }
 
+  updateSign(event) {
+    this.handleChange('sign', event.target.value);
+  }
+
+  updateRemarks(event) {
+    this.handleChange('remarks', event.target.value);
+  }
+
   render() {
     const {
       props: {
@@ -158,6 +197,10 @@ class StockItemForm extends React.PureComponent {
         locationError,
         category,
         categoryError,
+        sign,
+        signError,
+        remarks,
+        remarksError,
       },
     } = this;
 
@@ -184,13 +227,12 @@ class StockItemForm extends React.PureComponent {
         </div>
         <div className={classNames('form-group', { 'has-error': submitted && descriptionError })}>
           <label htmlFor="stock-description">Description (w/ situation):</label>
-          <input
+          <textarea
             id="stock-description"
             className="form-control"
-            type="textarea"
             value={description}
             onChange={this.updateDescription}
-          />
+          ></textarea>
           <div className="help-block">
             {submitted && descriptionError}
           </div>
@@ -216,7 +258,7 @@ class StockItemForm extends React.PureComponent {
             value={condition}
             onChange={this.updateCondition}
           >
-            <option value="">Please select</option>
+            <option value="" disabled>Please select</option>
             <option value="Good">Good</option>
             <option value="Fair">Fair</option>
             <option value="Poor">Poor</option>
@@ -246,7 +288,7 @@ class StockItemForm extends React.PureComponent {
             value={category}
             onChange={this.updateCategory}
           >
-            <option value="">Please select</option>
+            <option value="" disabled>Please select</option>
             <optgroup label="行政紙品">
               <option value="AA">點名簿</option>
               <option value="AB">學生手冊</option>
@@ -332,9 +374,35 @@ class StockItemForm extends React.PureComponent {
             {submitted && categoryError}
           </div>
         </div>
+        <div className={classNames('form-group', { 'has-error': submitted && signError })}>
+          <label htmlFor="stock-sign">Sign:</label>
+          <input
+            disabled={!this.props.stock}
+            id="stock-sign"
+            className="form-control"
+            type="text"
+            value={sign}
+            onChange={this.updateSign}
+          />
+          <div className="help-block">
+            {submitted && signError}
+          </div>
+        </div>
+        <div className={classNames('form-group', { 'has-error': submitted && remarksError })}>
+          <label htmlFor="stock-remarks">Remarks:</label>
+          <textarea
+            id="stock-remarks"
+            className="form-control"
+            value={remarks}
+            onChange={this.updateRemarks}
+          ></textarea>
+          <div className="help-block">
+            {submitted && remarksError}
+          </div>
+        </div>
         <div className="pull-right">
           <button type="submit" className="btn btn-primary">Submit</button>
-          <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>
+          <button type="button" className="btn btn-default" onClick={this.reset}>Reset</button>
         </div>
       </form>
     );

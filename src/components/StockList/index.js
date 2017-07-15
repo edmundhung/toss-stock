@@ -20,9 +20,62 @@ import {
 } from '../../store/stock';
 import './style.css';
 
+function convertStockToCsv(stocks) {
+  var array = stocks;
+  console.log("array", array);
+  console.log("count", array[0].eventDates);
+
+  var tcat = ["Basic Information", "Related Pictures", "Event Tags"];
+  var thead = ["Code", "Date Received", "Description", "Donor", "Physical Condition", "Location", "Category",
+              "Classification No.", "Sign", "Remarks", "ID Photos", "Scanned Images", "Name", "Date", "Location", "People"];
+  var subthead = ["Name", "Length(cm)", "Width(cm)", "Height(cm)"];
+
+  var maxLengthPhotos = Math.max.apply(null, array.map(function(a){ return a.photos.length; }));
+  var maxLengthScannedImages = Math.max.apply(null, array.map(function(a){ return a.scannedImages.length; }));
+  var maxLengthEventDates = Math.max.apply(null, array.map(function(a){ return a.eventDates.length; }));
+  var maxLengthEventLocations = Math.max.apply(null, array.map(function(a){ return a.eventLocations.length; }));
+  var maxLengthEventNames = Math.max.apply(null, array.map(function(a){ return a.eventNames.length; }));
+  var maxLengthEventPeople = Math.max.apply(null, array.map(function(a){ return a.eventPeople.length; }));
+
+
+  var str = '';
+  str += "Basic Information,,,,,,,,,,Related Picture,,Event Tags\n";
+  str += thead.map(function(h){ return h; });
+  str += "\n";
+
+  console.log("str", str);
+
+  for (var i = 0; i < array.length; i++) {
+    var line = '';
+    for (var index in array[i]) {
+      if (line !== '') line += ','
+
+      line += array[i][index];
+    }
+
+    str += line + '\n';
+  }
+
+  return str;
+}
+
 class StockList extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
+    this.exportStocks = this.exportStocks.bind(this);
+  }
+
+  exportStocks() {
+    const { stocks } = this.props;
+    const csvContent = convertStockToCsv(stocks);
+    const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+    const link = document.createElement("a");
+
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "my_data.csv");
+    document.body.appendChild(link); // Required for FF
+
+    link.click(); // This will download the data file named "my_data.csv".
   }
 
   render() {
@@ -54,7 +107,10 @@ class StockList extends React.PureComponent {
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="pull-right">
-              <button type="button" className="btn btn-default" onClick={showItemForm}>
+              <button type="button" className="btn btn-default" onClick={this.exportStocks}>
+                Export stocks
+              </button>
+              <button type="button" className="btn btn-default" onClick={() => showItemForm()}>
                 Add stock
               </button>
               <Modal show={isShowingItemForm} onHide={hideItemForm}>
@@ -64,6 +120,7 @@ class StockList extends React.PureComponent {
                 <Modal.Body>
                   <StockItemForm
                     code={nextStockCode}
+                    stock={null}
                     onSubmit={createStock}
                   />
                 </Modal.Body>
