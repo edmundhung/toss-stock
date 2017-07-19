@@ -6,6 +6,7 @@ import configureStore from './store/configureStore';
 import Home from './components/Home';
 import StockDetail from './components/StockDetail';
 import StockList from './components/StockList';
+import FirebaseTrial from './components/FirebaseTrial';
 
 import './index.css';
 
@@ -19,6 +20,7 @@ const app = (
         <Route exact path="/" component={Home} />
         <Route exact path="/stocks" component={StockList} />
         <Route path="/stocks/:code" component={StockDetail} />
+        <Route exact path="/firebase" component={FirebaseTrial} />
       </div>
     </Router>
   </Provider>
