@@ -274,8 +274,8 @@ export const initialState = {
            name: '1',
          },
          {
-           photoId: '1',
-           name: '1',
+           photoId: '2',
+           name: '2',
          },
        ],
        eventNames: [

@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import './style.css';
 
 class Home extends React.PureComponent {
-  constructor(props, context) {
-    super(props, context);
-  }
+  // constructor(props, context) {
+  //   super(props, context);
+  // }
 
   render() {
     return (
