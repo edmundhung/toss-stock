@@ -25,17 +25,17 @@ function convertStockToCsv(stocks) {
   console.log("array", array);
   console.log("count", array[0].eventDates);
 
-  var tcat = ["Basic Information", "Related Pictures", "Event Tags"];
+  // var tcat = ["Basic Information", "Related Pictures", "Event Tags"];
   var thead = ["Code", "Date Received", "Description", "Donor", "Physical Condition", "Location", "Category",
               "Classification No.", "Sign", "Remarks", "ID Photos", "Scanned Images", "Name", "Date", "Location", "People"];
-  var subthead = ["Name", "Length(cm)", "Width(cm)", "Height(cm)"];
+  // var subthead = ["Name", "Length(cm)", "Width(cm)", "Height(cm)"];
 
-  var maxLengthPhotos = Math.max.apply(null, array.map(function(a){ return a.photos.length; }));
-  var maxLengthScannedImages = Math.max.apply(null, array.map(function(a){ return a.scannedImages.length; }));
-  var maxLengthEventDates = Math.max.apply(null, array.map(function(a){ return a.eventDates.length; }));
-  var maxLengthEventLocations = Math.max.apply(null, array.map(function(a){ return a.eventLocations.length; }));
-  var maxLengthEventNames = Math.max.apply(null, array.map(function(a){ return a.eventNames.length; }));
-  var maxLengthEventPeople = Math.max.apply(null, array.map(function(a){ return a.eventPeople.length; }));
+  // var maxLengthPhotos = Math.max.apply(null, array.map(function(a){ return a.photos.length; }));
+  // var maxLengthScannedImages = Math.max.apply(null, array.map(function(a){ return a.scannedImages.length; }));
+  // var maxLengthEventDates = Math.max.apply(null, array.map(function(a){ return a.eventDates.length; }));
+  // var maxLengthEventLocations = Math.max.apply(null, array.map(function(a){ return a.eventLocations.length; }));
+  // var maxLengthEventNames = Math.max.apply(null, array.map(function(a){ return a.eventNames.length; }));
+  // var maxLengthEventPeople = Math.max.apply(null, array.map(function(a){ return a.eventPeople.length; }));
 
 
   var str = '';
