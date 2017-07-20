@@ -39,9 +39,9 @@ import {
 import './style.css';
 
 class StockDetail extends React.PureComponent {
-  constructor(props, context) {
-    super(props, context);
-  }
+  // constructor(props, context) {
+  //   super(props, context);
+  // }
 
   render() {
     const {
