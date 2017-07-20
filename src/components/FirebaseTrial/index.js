@@ -27,103 +27,166 @@ class FirebaseTrial extends React.PureComponent {
       console.log("error", errorMessage);
     });
 
-    // Get a reference to the database service
-    var database = firebase.database();
+    // // Example of stock #00001
+    // // var stock = {
+    // //    code: '00001',
+    // //    receivedDate: '2015-05-01',
+    // //    description: '',
+    // //    donor: 'Man Wai Ling Candy',
+    // //    condition: '',
+    // //    location: '',
+    // //    category: 'SB',
+    // //    classificationNum: 'SB00001',
+    // //    sign: '',
+    // //    remarks: '',
+    // //    photos: [
+    // //      {
+    // //        photoId: '1',
+    // //        name: 'SDC16430',
+    // //        length: 15.9,
+    // //        width: 2.8,
+    // //        height: 0,
+    // //      }
+    // //    ],
+    // //    scannedImages: [
+    // //      {
+    // //        photoId: '1',
+    // //        name: 'Scanned image\photo001.jpg',
+    // //      },
+    // //    ],
+    // //    eventNames: [
+    // //      '德愛中學音樂節',
+    // //    ],
+    // //    eventDates: [
+    // //      '1987',
+    // //    ],
+    // //    eventLocations: [
+    // //    ],
+    // //    eventPeople: [
+    // //    ],
+    // // };
 
-    // Get full stock list
-    firebase.database().ref("/").once('value').then(function(snapshot) {
-        var stocks = snapshot.val();
-        console.log("Stocklist", stocks);
-    });
+    // // Get a reference to the database service
+    // var database = firebase.database();
 
-    // Get a stock
-    var code = "00001";
-    firebase.database().ref(code).once('value').then(function(snapshot) {
-        var stock = snapshot.val();
-        console.log("A stock", stock);
-    });
+    // // Get full stock list
+    // database.ref("/").once('value').then(function(snapshot) {
+    //     var stocks = snapshot.val();
+    //     console.log("Stocklist", stocks);
+    // });
 
-    // Add a stock basic information by code
-    var code = "00002";
-    var stock = {
-       code: '00001',
-       receivedDate: '2016-04-23',
-       description: 'World Book Day',
-       donor: 'Library team',
-       condition: 'Good',
-       location: 'Library',
-       category: 'LB',
-       classificationNum: 'LB0001',
-       sign: 'Checked',
-       remarks: 'Borrowed to F.1 classes',
-       photos: [
-         {
-           photoId: '1',
-           name: '1',
-           length: 35,
-           width: 12,
-           height: 13
-         },
-         {
-           photoId: '2',
-           name: '2',
-           length: 35,
-           width: 12,
-           height: 13
-         },
-       ],
-       scannedImages: [
-         {
-           photoId: '1',
-           name: '1',
-         },
-       ],
-       eventNames: [
-         'World Book Day',
-         '2016',
-       ],
-       eventDates: [
-         '22/04/2016',
-         '23/04/2016',
-         '24/04/2016',
-       ],
-       eventLocations: [
-         'Library',
-       ],
-       eventPeople: [
-         'Ms Sin',
-         'Ms Lam',
-       ],
-    };
-    firebase.database().ref(code).set({
-      code: stock.code,
-      receivedDate: stock.receivedDate,
-      description: stock.description,
-      donor: stock.donor,
-      condition: stock.condition,
-      location: stock.location,
-      category: stock.category,
-      classificationNum: stock.classificationNum,
-      sign: stock.sign,
-      remarks: stock.remarks,
-    });
+    // // Get a stock
+    // var code = "00001";
+    // firebase.database().ref(code).once('value').then(function(snapshot) {
+    //     var stock = snapshot.val();
+    //     console.log("A stock", stock);
+    // });
 
-    // Delete a stock by code
-    // Hard delete
-    // firebase.database().ref(code).remove();
+    // // Create a stock with basic information by code
+    // var stock = {
+    //    code: '00002',
+    //    receivedDate: '2015-05-01',
+    //    description: '',
+    //    donor: 'Man Wai Ling Candy',
+    //    condition: '',
+    //    location: '',
+    //    category: 'SB',
+    //    classificationNum: 'SB00001',
+    //    sign: '',
+    //    remarks: '',
+    // };
+    // firebase.database().ref(stock.code).set({
+    //   code: stock.code,
+    //   receivedDate: stock.receivedDate,
+    //   description: stock.description,
+    //   donor: stock.donor,
+    //   condition: stock.condition,
+    //   location: stock.location,
+    //   category: stock.category,
+    //   classificationNum: stock.classificationNum,
+    //   sign: stock.sign,
+    //   remarks: stock.remarks,
+    // }).then(function() {
+    //   console.log("Stock ", stock.code, " added");
+    // });
+
+    // // Delete a stock by code
+    // // Hard delete
+    // // firebase.database().ref(stock.code).remove().then(function() {
+    // //   console.log("Stock ", stock.code, " hard deleted")
+    // // });
     // Soft delete
-    firebase.database().ref(code).update(
-      deletetime: Date.Now,
-    );
-    // Update stock basic information by code
-    // Add a ID photo for a stock
-    // Delete a ID photo for a stock
-    // Add a scanned image for a stock
-    // Delete a scanned photo for a stock
+    // var deleteTime;
+    // firebase.database().ref(stock.code).update({
+    //   deleteTime: Date.now(),
+    // }).then(function() {
+    //   console.log("Stock ", stock.code, " updated")
+    // });
+
+    // // Update stock basic information by code
+    // stock = {
+    //   ...stock,
+    //   receivedDate: "2016-07-01",
+    //   sign: "checked",
+    // };
+    // firebase.database().ref(stock.code).set(
+    //   stock
+    // ).then(function() {
+    //   console.log("Stock ", stock.code, " updated");
+    // });
+
+    // // Create a ID photo for a stock
+    // var photo = {
+    //   photoId: Date.now(),
+    //   name: 'SDC16430',
+    //   length: '15.9',
+    //   width: '2.8',
+    //   height: '',
+    // };
+    //
+    // firebase.database().ref(stock.code + "/photos/" + photo.photoId).set(
+    //   photo: photo,
+    // ).then(function () {
+    //   console.log("Stock ", stock.code, " added a new ID photo #", photo.photoId);
+    // });
+
+    // // Delete a ID photo for a stock
+    // firebase.database().ref(stock.code + "/photos/" + photo.photoId).remove()
+    // .then(function () {
+    //   console.log("Stock ", stock.code, " removed a ID photo #", photo.photoId);
+    // });
+
+    // // Add a scanned image for a stock
+    // var photo = {
+    //   photoId: Date.now(),
+    //   name: 'Scanned image\\photo001.jpg',
+    // };
+    //
+    // firebase.database().ref(stock.code + "/scannedImages/" + photo.photoId).set(
+    //   photo: photo,
+    // ).then(function () {
+    //   console.log("Stock ", stock.code, " added a new scanned image #", photo.photoId);
+    // });
+
+    // // Delete a scanned photo for a stock
+    // firebase.database().ref(stock.code + "/scannedImages/" + photo.photoId).remove()
+    // .then(function () {
+    //   console.log("Stock ", stock.code, " removed a scanned image #", photo.photoId);
+    // });
+
     // Add an event detail
     // Update an event detail
-
-
+    // var eventTag = {
+    //   eventNames: ['World'],
+    //   eventDates: ['1983'],
+    //   eventLocations: [],
+    //   eventPeople: [],
+    // };
+    // firebase.database().ref(stock.code).update(
+    //   eventTag: eventTag,
+    // ).then(function () {
+    //   console.log("Stock ", stock.code, " added event tags");
+    // });
 
     return (
       <div>
