@@ -23,16 +23,20 @@ export const SCAN_PHOTO_DELETE_CANCEL = 'stock/SCAN_PHOTO_DELETE_CANCEL';
 export const LIST_SHOW = 'stock/LIST_SHOW';
 export const DETAIL_SHOW = 'stock/DETAIL_SHOW';
 
-export function showList() {
+export function showList(stocks) {
   return {
     type: LIST_SHOW,
+    payload: stocks,
   };
 }
 
-export function showDetail(code) {
+export function showDetail(code, stock) {
   return {
     type: DETAIL_SHOW,
-    payload: code,
+    payload: {
+      code,
+      stock,
+    }
   };
 }
 
@@ -212,104 +216,105 @@ export function cancelScanPhotoDelete() {
 }
 
 export const initialState = {
-  stockByCode: {
-    '00001': {
-       code: '00001',
-       receivedDate: '2016-04-23',
-       description: 'World Book Day',
-       donor: 'Library team',
-       condition: 'Good',
-       location: 'Library',
-       category: 'LB',
-       classificationNum: 'LB0001',
-       sign: 'Checked',
-       remarks: 'Borrowed to F.1 classes',
-       photos: [
-         {
-           photoId: '1',
-           name: '1',
-           length: 35,
-           width: 12,
-           height: 13
-         },
-         {
-           photoId: '2',
-           name: '2',
-           length: 35,
-           width: 12,
-           height: 13
-         },
-       ],
-       scannedImages: [
-         {
-           photoId: '1',
-           name: '1',
-         },
-       ],
-       eventNames: [
-         'World Book Day',
-         '2016',
-       ],
-       eventDates: [
-         '22/04/2016',
-         '23/04/2016',
-         '24/04/2016',
-       ],
-       eventLocations: [
-         'Library',
-       ],
-       eventPeople: [
-         'Ms Sin',
-         'Ms Lam',
-       ],
-    },
-    '00002': {
-       code: '00002',
-       receivedDate: '2017-04-23',
-       description: 'World Book Day',
-       donor: 'Library team',
-       condition: 'Good',
-       location: 'Library',
-       category: 'LB',
-       classificationNum: 'LB0001',
-       sign: 'Checked',
-       remarks: 'Borrowed to F.1 classes',
-       photos: [
-         {
-           photoId: '1',
-           name: '1',
-           length: 35,
-           width: 12,
-           height: 13
-         },
-       ],
-       scannedImages: [
-         {
-           photoId: '1',
-           name: '1',
-         },
-         {
-           photoId: '2',
-           name: '2',
-         },
-       ],
-       eventNames: [
-         'World Book Day 2017',
-       ],
-       eventDates: [
-         '22/04/2016',
-         '23/04/2016',
-         '24/04/2016',
-       ],
-       eventLocations: [
-         'Library',
-       ],
-       eventPeople: [
-         'Ms Sin',
-         'Ms Lam',
-       ],
-    },
-  },
+  // stockByCode: {
+  //   '00001': {
+  //      code: '00001',
+  //      receivedDate: '2016-04-23',
+  //      description: 'World Book Day',
+  //      donor: 'Library team',
+  //      condition: 'Good',
+  //      location: 'Library',
+  //      category: 'LB',
+  //      classificationNum: 'LB0001',
+  //      sign: 'Checked',
+  //      remarks: 'Borrowed to F.1 classes',
+  //      photos: [
+  //        {
+  //          photoId: '1',
+  //          name: '1',
+  //          length: 35,
+  //          width: 12,
+  //          height: 13
+  //        },
+  //        {
+  //          photoId: '2',
+  //          name: '2',
+  //          length: 35,
+  //          width: 12,
+  //          height: 13
+  //        },
+  //      ],
+  //      scannedImages: [
+  //        {
+  //          photoId: '1',
+  //          name: '1',
+  //        },
+  //      ],
+  //      eventNames: [
+  //        'World Book Day',
+  //        '2016',
+  //      ],
+  //      eventDates: [
+  //        '22/04/2016',
+  //        '23/04/2016',
+  //        '24/04/2016',
+  //      ],
+  //      eventLocations: [
+  //        'Library',
+  //      ],
+  //      eventPeople: [
+  //        'Ms Sin',
+  //        'Ms Lam',
+  //      ],
+  //   },
+  //   '00002': {
+  //      code: '00002',
+  //      receivedDate: '2017-04-23',
+  //      description: 'World Book Day',
+  //      donor: 'Library team',
+  //      condition: 'Good',
+  //      location: 'Library',
+  //      category: 'LB',
+  //      classificationNum: 'LB0001',
+  //      sign: 'Checked',
+  //      remarks: 'Borrowed to F.1 classes',
+  //      photos: [
+  //        {
+  //          photoId: '1',
+  //          name: '1',
+  //          length: 35,
+  //          width: 12,
+  //          height: 13
+  //        },
+  //      ],
+  //      scannedImages: [
+  //        {
+  //          photoId: '1',
+  //          name: '1',
+  //        },
+  //        {
+  //          photoId: '2',
+  //          name: '2',
+  //        },
+  //      ],
+  //      eventNames: [
+  //        'World Book Day 2017',
+  //      ],
+  //      eventDates: [
+  //        '22/04/2016',
+  //        '23/04/2016',
+  //        '24/04/2016',
+  //      ],
+  //      eventLocations: [
+  //        'Library',
+  //      ],
+  //      eventPeople: [
+  //        'Ms Sin',
+  //        'Ms Lam',
+  //      ],
+  //   },
+  // },
+  stockByCode: {},
 
   // model
   openingModel: null,
@@ -391,6 +396,29 @@ export function getStockByCode(state) {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case LIST_SHOW: {
+      if (typeof action.payload === 'undefined') {
+        return state;
+      }
+
+      return {
+        ...state,
+        stockByCode: action.payload || initialState.stockByCode,
+      };
+    }
+    case DETAIL_SHOW: {
+      if (typeof action.payload.stock === 'undefined') {
+        return state;
+      }
+
+      return {
+        ...state,
+        stockByCode: {
+          ...state.stockByCode,
+          [action.payload.code]: action.payload.stock,
+        }
+      }
+    }
     case CREATE: {
       const { stock } = action.payload;
       const stockByCode = {

@@ -83,6 +83,12 @@ class StockDetail extends React.PureComponent {
       deleteScanPhoto,
     } = this.props;
 
+    if (!stock) {
+      return (
+        <div>Loading...</div>
+      );
+    }
+
     return (
       <div className="container-fluid">
         <div className="row">
