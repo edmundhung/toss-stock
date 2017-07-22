@@ -31,16 +31,19 @@ export default function middleware({ getState }) {
   // Initialize Firebase
   firebase.initializeApp(config);
 
-  // Authentication
-  firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log("error.code", errorCode);
-    console.log("error", errorMessage);
-  });
-
+  const auth = firebase.auth();
   const database = firebase.database();
+
+  // Authentication
+  const login = auth
+    .signInWithEmailAndPassword(email, password)
+    .then(user => {
+      next(login(user))
+    })
+    .catch(error => {
+
+    });
+  // auth.signOut();
 
   return next => action => {
     const result = next(action);
@@ -51,8 +54,9 @@ export default function middleware({ getState }) {
           .ref('/snapshot')
           .on('value', snapshot => next(
             showList(snapshot.val())
+          ), error => console.log(
+            error
           ));
-
         break;
       }
       case DETAIL_SHOW: {
