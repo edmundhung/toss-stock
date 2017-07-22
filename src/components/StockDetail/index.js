@@ -18,6 +18,7 @@ import {
   isConfirmingDeleteScanPhoto,
 } from '../../store/reducers';
 import {
+  showDetail,
   updateStockItem,
   updateStockEvent,
   showStockItemForm,
@@ -43,6 +44,10 @@ class StockDetail extends React.PureComponent {
   // constructor(props, context) {
   //   super(props, context);
   // }
+
+  componentDidMount() {
+    this.props.showDetail(this.props.match.params.code);
+  }
 
   render() {
     const {
@@ -371,6 +376,7 @@ export function mapStateToProps(state, props) {
 }
 
 export const actionCreators = {
+  showDetail: showDetail,
   updateStockItem: updateStockItem,
   updateStockEvent: updateStockEvent,
   showItemForm: showStockItemForm,

@@ -2,4 +2,4 @@ import configureStore from './configureStore';
 
 // HI
 
-export configureStore;
+export { configureStore };

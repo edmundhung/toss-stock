@@ -20,6 +20,21 @@ export const SCAN_PHOTO_FORM_SHOW = 'stock/SCAN_PHOTO_FORM_SHOW';
 export const SCAN_PHOTO_FORM_HIDE = 'stock/SCAN_PHOTO_FORM_HIDE';
 export const SCAN_PHOTO_DELETE_CONFIRM = 'stock/SCAN_PHOTO_DELETE_CONFIRM';
 export const SCAN_PHOTO_DELETE_CANCEL = 'stock/SCAN_PHOTO_DELETE_CANCEL';
+export const LIST_SHOW = 'stock/LIST_SHOW';
+export const DETAIL_SHOW = 'stock/DETAIL_SHOW';
+
+export function showList() {
+  return {
+    type: LIST_SHOW,
+  };
+}
+
+export function showDetail(code) {
+  return {
+    type: DETAIL_SHOW,
+    payload: code,
+  };
+}
 
 export function createStock(stock) {
   return {

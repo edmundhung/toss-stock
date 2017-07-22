@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import configureStore from './store/configureStore';
+import { configureStore } from './store';
 import Home from './components/Home';
 import StockDetail from './components/StockDetail';
 import StockList from './components/StockList';

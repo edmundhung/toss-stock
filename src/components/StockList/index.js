@@ -11,6 +11,7 @@ import {
   isConfirmingStockDelete,
 } from '../../store/reducers';
 import {
+  showList,
   createStock,
   deleteStock,
   showStockItemForm,
@@ -63,6 +64,10 @@ class StockList extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.exportStocks = this.exportStocks.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.showList();
   }
 
   exportStocks() {
@@ -194,6 +199,7 @@ export function mapStateToProps(state) {
 }
 
 export const actionCreators = {
+  showList: showList,
   createStock: createStock,
   deleteStock: deleteStock,
   showItemForm: showStockItemForm,
