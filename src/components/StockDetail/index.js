@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import StockItemForm from '../StockItemForm';
 import StockEventForm from '../StockEventForm';
 import StockPhotoForm from '../StockPhotoForm';
+import categoryDescription from '../../config/category.json'
 import {
   getStockByCode,
   getItemFormCode,
@@ -81,6 +82,13 @@ class StockDetail extends React.PureComponent {
       <div className="container-fluid">
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <h6>Heritage stock</h6>
+            <h2>Item #{stock.code}</h2>
+            <hr/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="well">
               <div className="well">
                 <button type="button" className="btn btn-default btn-xs pull-right" onClick={() => showItemForm(stock.code)}>
@@ -125,7 +133,7 @@ class StockDetail extends React.PureComponent {
                 </div>
                 <div className="row">
                   <div className="col-xs-3">Category:</div>
-                  <div className="col-xs-9">{stock.category}</div>
+                  <div className="col-xs-9">{categoryDescription[stock.category]}</div>
                 </div>
                 <div className="row">
                   <div className="col-xs-3">Classification no.:</div>

@@ -78,7 +78,7 @@ class StockItemForm extends React.PureComponent {
       condition: this.state.condition.trim(),
       location: this.state.location.trim(),
       category: this.state.category.trim(),
-      classificationNum: this.state.category.trim() + this.state.classificationNum.trim(),
+      classificationNum: this.state.category.trim() + this.props.code.trim(),
       sign: this.state.sign.trim(),
       remarks: this.state.remarks.trim(),
     };
