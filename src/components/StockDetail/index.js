@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import StockItemForm from '../StockItemForm';
 import StockEventForm from '../StockEventForm';
 import StockPhotoForm from '../StockPhotoForm';
+import categoryDescription from '../../config/category.json'
 import {
   getStockByCode,
   getItemFormCode,
@@ -132,7 +133,7 @@ class StockDetail extends React.PureComponent {
                 </div>
                 <div className="row">
                   <div className="col-xs-3">Category:</div>
-                  <div className="col-xs-9">{stock.category}</div>
+                  <div className="col-xs-9">{categoryDescription[stock.category]}</div>
                 </div>
                 <div className="row">
                   <div className="col-xs-3">Classification no.:</div>
