@@ -18,13 +18,13 @@ class StockEventForm extends React.PureComponent {
     const { stock } = props;
 
     const defaultState = {
-      eventNames: [],
+      eventNames: '',
       eventNamesError: '',
-      eventDates: [],
+      eventDates: '',
       eventDatesError: '',
-      eventLocations: [],
+      eventLocations: '',
       eventLocationsError: '',
-      eventPeople: [],
+      eventPeople: '',
       eventPeopleError: '',
     };
 
@@ -34,10 +34,10 @@ class StockEventForm extends React.PureComponent {
 
     return {
       ...defaultState,
-      eventNames: stock.eventNames.join(', '),
-      eventDates: stock.eventDates.join(', '),
-      eventLocations: stock.eventLocations.join(', '),
-      eventPeople: stock.eventPeople.join(', '),
+      eventNames: (stock.eventNames ? stock.eventNames.join(', ') : ''),
+      eventDates: (stock.eventDates ? stock.eventDates.join(', ') : ''),
+      eventLocations: (stock.eventLocations ? stock.eventLocations.join(', ') : ''),
+      eventPeople: (stock.eventPeople ? stock.eventPeople.join(', ') : ''),
     };
   }
 
@@ -51,10 +51,22 @@ class StockEventForm extends React.PureComponent {
     event.preventDefault();
 
     const eventTag = {
-      eventNames: this.state.eventNames.split(',').map(name => name.trim()),
-      eventDates: this.state.eventDates.split(',').map(date => date.trim()),
-      eventLocations: this.state.eventLocations.split(',').map(location => location.trim()),
-      eventPeople: this.state.eventPeople.split(',').map(person => person.trim()),
+      eventNames: this.state.eventNames.split(',')
+                    .map(name => name.trim()) // Remove all leading & trailing
+                    .filter(name => name !== '') // Remove empty string
+                    .filter((name, i, self) => self.indexOf(name) === i), // Remove duplicates
+      eventDates: this.state.eventDates.split(',')
+                    .map(date => date.trim())
+                    .filter(date => date !== '')
+                    .filter((date, i, self) => self.indexOf(date) === i),
+      eventLocations: this.state.eventLocations.split(',')
+                        .map(location => location.trim())
+                        .filter(location => location !== '')
+                        .filter((location, i, self) => self.indexOf(location) === i),
+      eventPeople: this.state.eventPeople.split(',')
+                    .map(person => person.trim())
+                    .filter(person => person !== '')
+                    .filter((person, i, self) => self.indexOf(person) === i),
     };
 
     this.props.onSubmit(eventTag);
