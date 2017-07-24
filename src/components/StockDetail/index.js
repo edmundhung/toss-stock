@@ -81,6 +81,12 @@ class StockDetail extends React.PureComponent {
       <div className="container-fluid">
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <h6>Heritage stock</h6>
+            <h2>Item #{stock.code}</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="well">
               <div className="well">
                 <button type="button" className="btn btn-default btn-xs pull-right" onClick={() => showItemForm(stock.code)}>
