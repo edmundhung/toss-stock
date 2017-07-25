@@ -2,8 +2,11 @@ import * as firebase from 'firebase';
 import { getStockByCode } from './reducers';
 import {
   LOGIN_REQUEST,
+  LOGOUT_REQUEST,
   acceptLogin,
   rejectLogin,
+  acceptLogout,
+  rejectLogout,
 } from './session';
 import {
   CREATE,
@@ -54,6 +57,17 @@ export default function middleware({ getState }) {
           })
           .catch(error => {
             next(rejectLogin(error));
+          });
+        break;
+      }
+      case LOGOUT_REQUEST: {
+        auth
+          .signOut()
+          .then(() => {
+            next(acceptLogout());
+          })
+          .catch(error => {
+            next(rejectLogout(error));
           });
         break;
       }
