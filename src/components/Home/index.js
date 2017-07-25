@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Login from '../Login';
+import LoginForm from '../LoginForm';
 import './style.css';
 
 class Home extends React.PureComponent {
@@ -9,6 +10,14 @@ class Home extends React.PureComponent {
   // }
 
   render() {
+    const {
+      // state
+      defaultEmail,
+
+      // actionCreators
+      login,
+    } = this.props;
+
     return (
       <div className="container">
         <div className="row">
@@ -17,9 +26,11 @@ class Home extends React.PureComponent {
             <h1>Heritage Stock<br/>Management System</h1>
           </div>
           <div className="col-xs-4 col-xs-offset-4">
-            <hr />
             <div className="well">
-              <Login defaultEmail="librarian@takoi.edu.hk" />
+              <LoginForm
+                defaultEmail={defaultEmail}
+                onSubmit={login}
+              />
             </div>
           </div>
         </div>
@@ -28,4 +39,16 @@ class Home extends React.PureComponent {
   }
 }
 
-export default Home;
+
+
+export function mapStateToProps(state) {
+  return {
+    defaultEmail: 'librarian@takoi.edu.hk',
+  };
+}
+
+export const actionCreators = {
+  login: () => {},
+};
+
+export default connect(mapStateToProps, actionCreators)(Home);

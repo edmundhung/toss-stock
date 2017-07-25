@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import './style.css';
 
-class Login extends React.PureComponent {
+class LoginForm extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -154,4 +154,4 @@ class Login extends React.PureComponent {
   }
 }
 
-export default Login;
+export default LoginForm;
