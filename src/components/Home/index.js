@@ -1,7 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import LoginForm from '../LoginForm';
+import {
+  isLoggedIn,
+  isLoggingIn,
+} from '../../store/reducers';
+import {
+  requestLogin,
+} from '../../store/session';
 import './style.css';
 
 class Home extends React.PureComponent {
@@ -13,10 +20,18 @@ class Home extends React.PureComponent {
     const {
       // state
       defaultEmail,
+      isLoggedIn,
+      isLoggingIn,
 
       // actionCreators
       login,
     } = this.props;
+
+    if (isLoggedIn) {
+      return (
+        <Redirect to="/stocks" />
+      );
+    }
 
     return (
       <div className="container">
@@ -30,6 +45,7 @@ class Home extends React.PureComponent {
               <LoginForm
                 defaultEmail={defaultEmail}
                 onSubmit={login}
+                disabled={isLoggingIn}
               />
             </div>
           </div>
@@ -44,11 +60,13 @@ class Home extends React.PureComponent {
 export function mapStateToProps(state) {
   return {
     defaultEmail: 'librarian@takoi.edu.hk',
+    isLoggingIn: isLoggingIn(state),
+    isLoggedIn: isLoggedIn(state),
   };
 }
 
 export const actionCreators = {
-  login: () => {},
+  login: requestLogin,
 };
 
 export default connect(mapStateToProps, actionCreators)(Home);

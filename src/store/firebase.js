@@ -1,6 +1,11 @@
 import * as firebase from 'firebase';
 import { getStockByCode } from './reducers';
 import {
+  LOGIN_REQUEST,
+  acceptLogin,
+  rejectLogin,
+} from './session';
+import {
   CREATE,
   UPDATE_ITEM,
   UPDATE_EVENT,
@@ -16,8 +21,6 @@ import {
 } from './stock';
 
 // Initialize user
-const email = "lws629@ha.org.hk";
-const password = "qazwsxcvbnm";
 const config = {
   apiKey: 'AIzaSyD4JLrUw_PHEe5yaHG3G5iyLksZwdASxuM',
   authDomain: 'toss-stock.firebaseapp.com',
@@ -34,21 +37,26 @@ export default function middleware({ getState }) {
   const auth = firebase.auth();
   const database = firebase.database();
 
-  // Authentication
-  // const login = auth
-  //   .signInWithEmailAndPassword(email, password)
-  //   .then(user => {
-  //     next(login(user))
-  //   })
-  //   .catch(error => {
-  //
-  //   });
-  // auth.signOut();
-
   return next => action => {
     const result = next(action);
 
     switch (action.type) {
+      case LOGIN_REQUEST: {
+        const {
+          email,
+          password,
+        } = action.payload;
+
+        auth
+          .signInWithEmailAndPassword(email, password)
+          .then(user => {
+            next(acceptLogin(user));
+          })
+          .catch(error => {
+            next(rejectLogin(error));
+          });
+        break;
+      }
       case LIST_SHOW: {
         database
           .ref('/snapshot')
