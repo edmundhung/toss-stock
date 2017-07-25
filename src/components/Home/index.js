@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Login from '../Login';
 import './style.css';
 
 class Home extends React.PureComponent {
@@ -18,17 +19,7 @@ class Home extends React.PureComponent {
           <div className="col-xs-4 col-xs-offset-4">
             <hr />
             <div className="well">
-              <ul className="nav nav-pills nav-stacked">
-                <li>
-                  <Link to="/stocks">Manage Stocks</Link>
-                </li>
-                <li>
-                  <Link to="/stocks">Export Stocks</Link>
-                </li>
-                <li>
-                  <Link to="/stocks">System Setting</Link>
-                </li>
-              </ul>
+              <Login defaultEmail="librarian@takoi.edu.hk" />
             </div>
           </div>
         </div>

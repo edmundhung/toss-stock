@@ -7,17 +7,28 @@ class Login extends React.PureComponent {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
+    this.switchUser = this.switchUser.bind(this);
 
-    this.state = this.getInitialFormState();
+    this.state = this.getInitialFormState(props);
   }
 
-  getInitialFormState() {
+  getInitialFormState(props) {
     return {
       submitted: false,
-      email: 'librarian@takoi.edu.hk',
+      email: props.defaultEmail || '',
       emailError: '',
       password: '',
       passwordError: '',
+    }
+  }
+
+  componentDidMount() {
+    this.password.focus();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.email === '' && prevState.email === this.props.defaultEmail) {
+      this.email.focus();
     }
   }
 
@@ -30,11 +41,11 @@ class Login extends React.PureComponent {
     };
 
     let isValid = true;
-    let emailError;
-    let passwordError;
+    let emailError = '';
+    let passwordError = '';
 
     // validation
-    if (user.email === '') {
+    if (user.email.trim() === '') {
       isValid = false;
       emailError = 'Email is required.';
     } else if (user.password === '') {
@@ -55,6 +66,12 @@ class Login extends React.PureComponent {
     this.props.onSubmit(user);
   }
 
+  switchUser() {
+    this.setState(() => ({
+      email: '',
+    }));
+  }
+
   handleChange(name, value) {
     const { readOnly } = this.props;
 
@@ -73,56 +90,66 @@ class Login extends React.PureComponent {
 
   render() {
     const {
-      submitted,
-      email,
-      emailError,
-      password,
-      passwordError,
-    } = this.state;
+      props: {
+        defaultEmail,
+      },
+      state: {
+        submitted,
+        email,
+        emailError,
+        password,
+        passwordError,
+      },
+    } = this;
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-xs-8 col-xs-offset-2 text-center">
-            <h3>Tak Oi Secondary School</h3>
-            <h1>Heritage Stock<br/>Management System</h1>
-          </div>
-          <div className="col-xs-4 col-xs-offset-4">
-            <hr />
-            <div className="well">
-              <form onSubmit={this.handleSubmit}>
-                <div className={classNames('form-group', { 'has-error': submitted && emailError })}>
-                  <input
-                    id="user-email"
-                    className="form-control"
-                    type="email"
-                    value={email}
-                    disabled
-                    onChange={this.updateEmail}
-                  />
-                  <div className="help-block">
-                    {submitted && emailError}
-                  </div>
-                </div>
-                <div className={classNames('form-group', { 'has-error': submitted && passwordError })}>
-                  <input
-                    id="user-password"
-                    className="form-control"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={this.updatePassword}
-                  />
-                  <div className="help-block">
-                    {submitted && passwordError}
-                  </div>
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
-              </form>
+      <form onSubmit={this.handleSubmit}>
+        <div className={classNames('form-group', { 'has-error': submitted && emailError })}>
+          <div className="input-group">
+            <input
+              id="user-email"
+              className="form-control"
+              tabIndex="1"
+              ref={input => { this.email = input; }}
+              type="email"
+              placeholder="Email"
+              value={email}
+              disabled={email === defaultEmail}
+              onChange={this.updateEmail}
+            />
+            <div className="input-group-btn">
+              <button type="button" className="btn btn-default" onClick={this.switchUser}>
+                <i className="glyphicon glyphicon-user" />
+              </button>
             </div>
           </div>
+          <div className="help-block">
+            {submitted && emailError}
+          </div>
         </div>
-      </div>
+        <div className={classNames('form-group', { 'has-error': submitted && passwordError })}>
+          <div className="input-group">
+            <input
+              id="user-password"
+              className="form-control"
+              tabIndex="2"
+              ref={input => { this.password = input; }}
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={this.updatePassword}
+            />
+            <div className="input-group-btn">
+              <button type="submit" className="btn btn-warning" tabIndex="3">
+                <i className="glyphicon glyphicon-ok" />
+              </button>
+            </div>
+          </div>
+          <div className="help-block">
+            {submitted && passwordError}
+          </div>
+        </div>
+      </form>
     );
   }
 }
