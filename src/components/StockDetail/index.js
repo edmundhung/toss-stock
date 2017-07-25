@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
+import Header from '../Header';
 import StockItemForm from '../StockItemForm';
 import StockEventForm from '../StockEventForm';
 import StockPhotoForm from '../StockPhotoForm';
@@ -18,6 +19,7 @@ import {
   isConfirmingDeleteScanPhoto,
 } from '../../store/reducers';
 import {
+  showDetail,
   updateStockItem,
   updateStockEvent,
   showStockItemForm,
@@ -43,6 +45,10 @@ class StockDetail extends React.PureComponent {
   // constructor(props, context) {
   //   super(props, context);
   // }
+
+  componentDidMount() {
+    this.props.showDetail(this.props.match.params.code);
+  }
 
   render() {
     const {
@@ -78,15 +84,17 @@ class StockDetail extends React.PureComponent {
       deleteScanPhoto,
     } = this.props;
 
+    if (!stock) {
+      return (
+        <div>Loading...</div>
+      );
+    }
+
     return (
       <div className="container-fluid">
-        <div className="row">
-          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-            <h6>Heritage stock</h6>
-            <h2>Item #{stock.code}</h2>
-            <hr/>
-          </div>
-        </div>
+        <Header>
+          <h2>Item #{stock.code}</h2>
+        </Header>
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="well">
@@ -371,6 +379,7 @@ export function mapStateToProps(state, props) {
 }
 
 export const actionCreators = {
+  showDetail: showDetail,
   updateStockItem: updateStockItem,
   updateStockEvent: updateStockEvent,
   showItemForm: showStockItemForm,

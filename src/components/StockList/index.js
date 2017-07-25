@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
+import Header from '../Header';
 import StockItemForm from '../StockItemForm';
 import {
   getStocks,
@@ -11,6 +12,7 @@ import {
   isConfirmingStockDelete,
 } from '../../store/reducers';
 import {
+  showList,
   createStock,
   deleteStock,
   showStockItemForm,
@@ -65,6 +67,10 @@ class StockList extends React.PureComponent {
     this.exportStocks = this.exportStocks.bind(this);
   }
 
+  componentDidMount() {
+    this.props.showList();
+  }
+
   exportStocks() {
     const { stocks } = this.props;
     const csvContent = convertStockToCsv(stocks);
@@ -98,43 +104,39 @@ class StockList extends React.PureComponent {
 
     return (
       <div className="container-fluid">
-        <div className="row">
-          <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-            <h6>Heritage stock</h6>
-            <span className="h2">Item List</span>
-            <div className="pull-right">
-              <button type="button" className="btn btn-default" onClick={this.exportStocks}>
-                Export stocks
-              </button>
-              <button type="button" className="btn btn-default" onClick={() => showItemForm()}>
-                Add stock
-              </button>
-              <Modal show={isShowingItemForm} onHide={hideItemForm}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Add stock</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <StockItemForm
-                    code={nextStockCode}
-                    stock={null}
-                    onSubmit={createStock}
-                  />
-                </Modal.Body>
-              </Modal>
-              <Modal show={isConfirmingDelete} onHide={cancelDelete}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirm delete stock #{deletingStockCode}?</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
-                  <button type="button" className="btn btn-danger" onClick={() => deleteStock(deletingStockCode)}>
-                    Confirm
-                  </button>
-                </Modal.Footer>
-              </Modal>
-            </div>
-            <hr/>
+        <Header>
+          <span className="h2">Item List</span>
+          <div className="pull-right">
+            <button type="button" className="btn btn-default" onClick={this.exportStocks}>
+              Export stocks
+            </button>
+            <button type="button" className="btn btn-default" onClick={() => showItemForm()}>
+              Add stock
+            </button>
+            <Modal show={isShowingItemForm} onHide={hideItemForm}>
+              <Modal.Header closeButton>
+                <Modal.Title>Add stock</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <StockItemForm
+                  code={nextStockCode}
+                  stock={null}
+                  onSubmit={createStock}
+                />
+              </Modal.Body>
+            </Modal>
+            <Modal show={isConfirmingDelete} onHide={cancelDelete}>
+              <Modal.Header closeButton>
+                <Modal.Title>Confirm delete stock #{deletingStockCode}?</Modal.Title>
+              </Modal.Header>
+              <Modal.Footer>
+                <button type="button" className="btn btn-danger" onClick={() => deleteStock(deletingStockCode)}>
+                  Confirm
+                </button>
+              </Modal.Footer>
+            </Modal>
           </div>
-        </div>
+        </Header>
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <div className="table-responsive">
@@ -194,6 +196,7 @@ export function mapStateToProps(state) {
 }
 
 export const actionCreators = {
+  showList: showList,
   createStock: createStock,
   deleteStock: deleteStock,
   showItemForm: showStockItemForm,

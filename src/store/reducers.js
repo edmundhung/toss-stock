@@ -1,12 +1,17 @@
 import { combineReducers } from 'redux';
+import session, * as sessionModule from './session';
 import stock, * as stockModule from './stock';
 import history from './history';
 
 const reducer = combineReducers({
+  session,
   stock,
   history,
 });
 
+export const getUser = state => sessionModule.getUser(state.session);
+export const isLoggedIn = state => sessionModule.isLoggedIn(state.session);
+export const isLoggingIn = state => sessionModule.isLoggingIn(state.session);
 export const getHistory = state => state.history;
 export const getStocks = state => stockModule.getStocks(state.stock);
 export const getNextStockCode = state => stockModule.getNextStockCode(state.stock);

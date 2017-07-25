@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import configureStore from './store/configureStore';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { configureStore } from './store';
 import Home from './components/Home';
 import StockDetail from './components/StockDetail';
 import StockList from './components/StockList';
@@ -15,11 +15,11 @@ const container = document.getElementById('root');
 const app = (
   <Provider store={store}>
     <Router>
-      <div>
+      <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/stocks" component={StockList} />
         <Route path="/stocks/:code" component={StockDetail} />
-      </div>
+      </Switch>
     </Router>
   </Provider>
 );

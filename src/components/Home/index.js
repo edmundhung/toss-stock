@@ -1,5 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import LoginForm from '../LoginForm';
+import {
+  isLoggedIn,
+  isLoggingIn,
+} from '../../store/reducers';
+import {
+  requestLogin,
+} from '../../store/session';
 import './style.css';
 
 class Home extends React.PureComponent {
@@ -8,6 +17,22 @@ class Home extends React.PureComponent {
   // }
 
   render() {
+    const {
+      // state
+      defaultEmail,
+      isLoggedIn,
+      isLoggingIn,
+
+      // actionCreators
+      login,
+    } = this.props;
+
+    if (isLoggedIn) {
+      return (
+        <Redirect to="/stocks" />
+      );
+    }
+
     return (
       <div className="container">
         <div className="row">
@@ -16,19 +41,12 @@ class Home extends React.PureComponent {
             <h1>Heritage Stock<br/>Management System</h1>
           </div>
           <div className="col-xs-4 col-xs-offset-4">
-            <hr />
             <div className="well">
-              <ul className="nav nav-pills nav-stacked">
-                <li>
-                  <Link to="/stocks">Manage Stocks</Link>
-                </li>
-                <li>
-                  <Link to="/stocks">Export Stocks</Link>
-                </li>
-                <li>
-                  <Link to="/stocks">System Setting</Link>
-                </li>
-              </ul>
+              <LoginForm
+                defaultEmail={defaultEmail}
+                onSubmit={login}
+                disabled={isLoggingIn}
+              />
             </div>
           </div>
         </div>
@@ -37,4 +55,18 @@ class Home extends React.PureComponent {
   }
 }
 
-export default Home;
+
+
+export function mapStateToProps(state) {
+  return {
+    defaultEmail: 'librarian@takoi.edu.hk',
+    isLoggingIn: isLoggingIn(state),
+    isLoggedIn: isLoggedIn(state),
+  };
+}
+
+export const actionCreators = {
+  login: requestLogin,
+};
+
+export default connect(mapStateToProps, actionCreators)(Home);
