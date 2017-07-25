@@ -35,14 +35,14 @@ export default function middleware({ getState }) {
   const database = firebase.database();
 
   // Authentication
-  const login = auth
-    .signInWithEmailAndPassword(email, password)
-    .then(user => {
-      next(login(user))
-    })
-    .catch(error => {
-
-    });
+  // const login = auth
+  //   .signInWithEmailAndPassword(email, password)
+  //   .then(user => {
+  //     next(login(user))
+  //   })
+  //   .catch(error => {
+  //
+  //   });
   // auth.signOut();
 
   return next => action => {
