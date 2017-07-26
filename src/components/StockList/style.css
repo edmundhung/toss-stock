@@ -3,6 +3,22 @@ h6 {
   text-transform: uppercase;
 }
 
+th, td {
+  vertical-align: middle;
+}
+
+.btn-link {
+  color: #bbbbbb;
+}
+
+.btn-stock-mgt {
+  width: 80px;
+}
+
+.btn-stock-mgt i {
+  margin-right: 5px;
+}
+
 .alert-success {
   z-index: 100;
 }
