@@ -105,13 +105,14 @@ class StockList extends React.PureComponent {
     return (
       <div className="container-fluid">
         <Header>
-          <span className="h2">Item List</span>
           <div className="pull-right">
-            <button type="button" className="btn btn-default" onClick={this.exportStocks}>
-              Export stocks
+            <button type="button" className="btn btn-default btn-stock-mgt" onClick={this.exportStocks}>
+              <i className="glyphicon glyphicon-save margin-right-5" />
+              Export
             </button>
-            <button type="button" className="btn btn-default" onClick={() => showItemForm()}>
-              Add stock
+            <button type="button" className="btn btn-default btn-stock-mgt" onClick={() => showItemForm()}>
+              <i className="glyphicon glyphicon-plus margin-right-5" />
+              Add
             </button>
             <Modal show={isShowingItemForm} onHide={hideItemForm}>
               <Modal.Header closeButton>
@@ -136,6 +137,7 @@ class StockList extends React.PureComponent {
               </Modal.Footer>
             </Modal>
           </div>
+          <h2>Item List</h2>
         </Header>
         <div className="row">
           <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
@@ -167,10 +169,10 @@ class StockList extends React.PureComponent {
                       <td>
                         <button
                           type="button"
-                          className="btn btn-link"
+                          className="btn btn-link btn-xs"
                           onClick={() => confirmDelete(stock.code)}
                         >
-                          Delete
+                          <i className="glyphicon glyphicon-trash" />
                         </button>
                       </td>
                     </tr>

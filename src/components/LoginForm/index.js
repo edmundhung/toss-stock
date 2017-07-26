@@ -6,6 +6,7 @@ class LoginForm extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.switchUser = this.switchUser.bind(this);
 
@@ -80,12 +81,12 @@ class LoginForm extends React.PureComponent {
     }
   }
 
-  updatePassword(event) {
-    this.handleChange('password', event.target.value);
-  }
-
   updateEmail(event) {
     this.handleChange('email', event.target.value);
+  }
+
+  updatePassword(event) {
+    this.handleChange('password', event.target.value);
   }
 
   render() {

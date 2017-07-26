@@ -100,6 +100,7 @@ class StockDetail extends React.PureComponent {
             <div className="well">
               <div className="well">
                 <button type="button" className="btn btn-default btn-xs pull-right" onClick={() => showItemForm(stock.code)}>
+                  <i className="glyphicon glyphicon-pencil margin-right-5" />
                   Edit
                 </button>
                 <Modal show={isShowingItemForm} onHide={hideItemForm}>
@@ -168,7 +169,8 @@ class StockDetail extends React.PureComponent {
                           className="btn btn-default btn-xs pull-right"
                           onClick={() => showIdPhotoForm(stock.code)}
                         >
-                          Add ID photo
+                          <i className="glyphicon glyphicon-plus margin-right-5" />
+                          Add
                         </button>
                         <Modal show={isShowingIdPhotoForm} onHide={hideIdPhotoForm}>
                           <Modal.Header closeButton>
@@ -201,10 +203,10 @@ class StockDetail extends React.PureComponent {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-danger btn-xs pull-right"
+                            className="btn btn-link btn-xs pull-right"
                             onClick={() => confirmIdPhotoDelete(stock.code, photo.photoId)}
                           >
-                            Delete photo
+                            <i className="glyphicon glyphicon-trash" />
                           </button>
                         </td>
                       </tr>
@@ -231,7 +233,8 @@ class StockDetail extends React.PureComponent {
                           className="btn btn-default btn-xs pull-right"
                           onClick={() => showScanPhotoForm(stock.code)}
                         >
-                          Add scanned image
+                          <i className="glyphicon glyphicon-plus margin-right-5" />
+                          Add
                         </button>
                         <Modal show={isShowingScanPhotoForm} onHide={hideScanPhotoForm}>
                           <Modal.Header closeButton>
@@ -258,10 +261,10 @@ class StockDetail extends React.PureComponent {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-danger btn-xs pull-right"
+                            className="btn btn-link btn-xs pull-right"
                             onClick={() => confirmScanPhotoDelete(stock.code, scannedImage.photoId)}
                           >
-                            Delete photo
+                            <i className="glyphicon glyphicon-trash" />
                           </button>
                         </td>
                       </tr>
@@ -281,6 +284,7 @@ class StockDetail extends React.PureComponent {
               </div>
               <div className="well">
                 <button type="button" className="btn btn-default btn-xs pull-right" onClick={() => showEventForm(stock.code)}>
+                  <i className="glyphicon glyphicon-pencil margin-right-5" />
                   Edit
                 </button>
                 <Modal show={isShowingEventForm} onHide={hideEventForm}>

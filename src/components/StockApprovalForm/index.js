@@ -84,7 +84,7 @@ class StockApprovalForm extends React.PureComponent {
             onChange={this.updateRemarks}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-warning">Submit</button>
         <button type="reset" className="btn btn-default">Reset</button>
       </form>
     );
