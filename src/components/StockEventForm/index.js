@@ -152,7 +152,7 @@ class StockEventForm extends React.PureComponent {
           />
         </div>
         <div className="pull-right">
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className="btn btn-warning">Submit</button>
           <button type="button" className="btn btn-default" onClick={this.reset}>Reset</button>
         </div>
       </form>

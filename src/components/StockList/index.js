@@ -107,11 +107,11 @@ class StockList extends React.PureComponent {
         <Header>
           <div className="pull-right">
             <button type="button" className="btn btn-default btn-stock-mgt" onClick={this.exportStocks}>
-              <i className="glyphicon glyphicon-save" />
+              <i className="glyphicon glyphicon-save margin-right-5" />
               Export
             </button>
             <button type="button" className="btn btn-default btn-stock-mgt" onClick={() => showItemForm()}>
-              <i className="glyphicon glyphicon-plus" />
+              <i className="glyphicon glyphicon-plus margin-right-5" />
               Add
             </button>
             <Modal show={isShowingItemForm} onHide={hideItemForm}>
@@ -169,7 +169,7 @@ class StockList extends React.PureComponent {
                       <td>
                         <button
                           type="button"
-                          className="btn btn-link btn-sm"
+                          className="btn btn-link btn-xs"
                           onClick={() => confirmDelete(stock.code)}
                         >
                           <i className="glyphicon glyphicon-trash" />

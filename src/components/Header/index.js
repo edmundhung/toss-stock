@@ -26,8 +26,8 @@ class Header extends React.PureComponent {
       <div className="header row">
         <div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
           <div className="pull-right">
-            <button type="button" className="btn btn-link btn-sm" onClick={logout}>
-              <i className="glyphicon glyphicon-log-out" />
+            <button type="button" className="btn btn-link btn-xs" onClick={logout}>
+              <i className="glyphicon glyphicon-log-out margin-right-5" />
               Logout
             </button>
           </div>
