@@ -8,6 +8,7 @@
     "react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "deploy": "npm run build && firebase deploy",
     "eject": "react-scripts eject"
   },
   "repository": {
