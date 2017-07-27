@@ -22,108 +22,20 @@ import {
 } from '../../store/stock';
 import './style.css';
 
-function convertStockToCsv(header, datalist) {
-  // var array = datalist;
-  // console.log("array", array);
-  // console.log("count", array[0].eventDates);
+function convertStockToCsv(header, datalist, filename) {
+  const csvContent = []
+    .concat(header.join(','))
+    .concat(datalist.map(data => Object.keys(data).map(key => JSON.stringify(data[key])).join(',')))
+    .join('\n');
 
-  // var tcat = ["Basic Information", "Related Pictures", "Event Tags"];
-  // var thead = ["Code", "Date Received", "Description", "Donor", "Physical Condition", "Location", "Category",
-              // "Classification No.", "Sign", "Remarks", "ID Photos", "Scanned Images", "Name", "Date", "Location", "People"];
-  // var subthead = ["Name", "Length(cm)", "Width(cm)", "Height(cm)"];
+  const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+  const link = document.createElement('a');
 
-  // var maxLengthPhotos = Math.max.apply(null, array.map(function(a){ return a.photos.length; }));
-  // var maxLengthScannedImages = Math.max.apply(null, array.map(function(a){ return a.scannedImages.length; }));
-  // var maxLengthEventDates = Math.max.apply(null, array.map(function(a){ return a.eventDates.length; }));
-  // var maxLengthEventLocations = Math.max.apply(null, array.map(function(a){ return a.eventLocations.length; }));
-  // var maxLengthEventNames = Math.max.apply(null, array.map(function(a){ return a.eventNames.length; }));
-  // var maxLengthEventPeople = Math.max.apply(null, array.map(function(a){ return a.eventPeople.length; }));
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', filename + '.csv');
+  document.body.appendChild(link);
 
-
-  var str = '';
-  // str += "Basic Information,,,,,,,,,,Related Picture,,Event Tags\n";
-  str += header.map(function(h){ return h; });
-  str += "\n";
-
-  console.log("str", str);
-
-  for (var i = 0; i < datalist.length; i++) {
-    var line = '';
-    for (var index in datalist[i]) {
-      if (line !== '') line += ','
-
-      line += datalist[i][index];
-    }
-
-    str += line + '\n';
-  }
-
-  return str;
-}
-
-function getDataDic(stocks) {
-
-
-  const photoList = stocks.reduce(function (result, stock) {
-   const currentStockPhotos = (stock.photos || []).map(function (photo) {
-     return {
-       code: stock.code,
-       photoId: photo.photoId,
-       name: photo.name,
-       length: photo.length,
-       width: photo.width,
-       height: photo.height,
-     };
-   });
-   return result.concat(currentStockPhotos);
-  }, []);
-  const scannedImageList = stocks.reduce(function(result, stock) {
-    const currentStockPhotos = (stock.scannedImages || []).map(function (photo) {
-      return {
-        code: stock.code,
-        photoId: photo.photoId,
-        name: photo.name,
-      };
-    });
-    return result.concat(currentStockPhotos);
-  }, []);
-  const eventTagList = stocks.reduce(function(result, stock) {
-    const eventNameList = (stock.eventNames || []).map(function(name) {
-      return {
-        code: stock.code,
-        type: "name",
-        value: name,
-      }
-    });
-    const eventDateList = (stock.eventDates || []).map(function(date) {
-      return {
-        code: stock.code,
-        type: "date",
-        value: date,
-      }
-    });
-    const eventLocationList = (stock.eventLocations || []).map(function(location) {
-      return {
-        code: stock.code,
-        type: "location",
-        value: location,
-      }
-    });
-    const eventPeopleList = (stock.eventPeople || []).map(function(person) {
-      return {
-        code: stock.code,
-        type: "people",
-        value: person,
-      }
-    });
-
-    return result.concat(eventNameList, eventDateList, eventLocationList, eventPeopleList);
-  }, []);
-
-  // console.log(basicInfoList);
-  console.log(photoList);
-  console.log(scannedImageList);
-  console.log(eventTagList);
+  link.click();
 }
 
 class StockList extends React.PureComponent {
@@ -139,6 +51,7 @@ class StockList extends React.PureComponent {
   exportStocks() {
     const { stocks } = this.props;
 
+    const date = new Date().toISOString().substr(0, 10).replace('-', '');
     // Basic Information
     const basicInfoList = stocks.map(function(stock) {
       return {
@@ -153,19 +66,75 @@ class StockList extends React.PureComponent {
         remarks: stock.remarks,
       }
     });
-    const basicInfoHeader = [ "Code", "Received Date", "Description", "Donor", "Condition", "Location", "Category", "Sign", "Remarks" ];
-    const csvContent = convertStockToCsv(basicInfoHeader, basicInfoList)
+    const basicInfoHeader = [ 'Code', 'Received Date', 'Description', 'Donor', 'Condition', 'Location', 'Category', 'Sign', 'Remarks' ];
+    convertStockToCsv(basicInfoHeader, basicInfoList, 'basicInfo_' + date);
 
-    // const csvContent = convertStockToCsv(stocks);
-    // const dataDic = getDataDic(stocks);
-    const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
-    const link = document.createElement("a");
+    // ID Photos
+    const photoList = stocks.reduce(function (result, stock) {
+     const currentStockPhotos = (stock.photos || []).map(function (photo) {
+       return {
+         code: stock.code,
+         photoId: photo.photoId,
+         name: photo.name,
+         length: photo.length,
+         width: photo.width,
+         height: photo.height,
+       };
+     });
+     return result.concat(currentStockPhotos);
+    }, []);
+    const photoHeader = [ 'Code', 'Photo ID', 'Name', 'Length', 'Width', 'Height' ];
+    convertStockToCsv(photoHeader, photoList, 'IDPhotos_' + date);
 
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "my_data.csv");
-    document.body.appendChild(link); // Required for FF
+    // Scanned Images
+    const scannedImageList = stocks.reduce(function(result, stock) {
+      const currentStockPhotos = (stock.scannedImages || []).map(function (photo) {
+        return {
+          code: stock.code,
+          photoId: photo.photoId,
+          name: photo.name,
+        };
+      });
+      return result.concat(currentStockPhotos);
+    }, []);
+    const scannedImageHeader = [ 'Code', 'Photo ID', 'Name' ];
+    convertStockToCsv(scannedImageHeader, scannedImageList, 'ScannedImages_' + date);
 
-    link.click(); // This will download the data file named "my_data.csv".
+    // Event Tags
+    const eventTagList = stocks.reduce(function(result, stock) {
+      const eventNameList = (stock.eventNames || []).map(function(name) {
+        return {
+          code: stock.code,
+          type: 'name',
+          value: name,
+        }
+      });
+      const eventDateList = (stock.eventDates || []).map(function(date) {
+        return {
+          code: stock.code,
+          type: 'date',
+          value: date,
+        }
+      });
+      const eventLocationList = (stock.eventLocations || []).map(function(location) {
+        return {
+          code: stock.code,
+          type: 'location',
+          value: location,
+        }
+      });
+      const eventPeopleList = (stock.eventPeople || []).map(function(person) {
+        return {
+          code: stock.code,
+          type: 'people',
+          value: person,
+        }
+      });
+
+      return result.concat(eventNameList, eventDateList, eventLocationList, eventPeopleList);
+    }, []);
+    const eventTagHeader = [ 'Code', 'Type', 'Value' ];
+    convertStockToCsv(eventTagHeader, eventTagList, 'EventTags_' + date);
   }
 
   render() {
