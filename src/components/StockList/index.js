@@ -22,14 +22,14 @@ import {
 } from '../../store/stock';
 import './style.css';
 
-function convertStockToCsv(stocks) {
-  var array = stocks;
-  console.log("array", array);
-  console.log("count", array[0].eventDates);
+function convertStockToCsv(header, datalist) {
+  // var array = datalist;
+  // console.log("array", array);
+  // console.log("count", array[0].eventDates);
 
   // var tcat = ["Basic Information", "Related Pictures", "Event Tags"];
-  var thead = ["Code", "Date Received", "Description", "Donor", "Physical Condition", "Location", "Category",
-              "Classification No.", "Sign", "Remarks", "ID Photos", "Scanned Images", "Name", "Date", "Location", "People"];
+  // var thead = ["Code", "Date Received", "Description", "Donor", "Physical Condition", "Location", "Category",
+              // "Classification No.", "Sign", "Remarks", "ID Photos", "Scanned Images", "Name", "Date", "Location", "People"];
   // var subthead = ["Name", "Length(cm)", "Width(cm)", "Height(cm)"];
 
   // var maxLengthPhotos = Math.max.apply(null, array.map(function(a){ return a.photos.length; }));
@@ -41,24 +41,89 @@ function convertStockToCsv(stocks) {
 
 
   var str = '';
-  str += "Basic Information,,,,,,,,,,Related Picture,,Event Tags\n";
-  str += thead.map(function(h){ return h; });
+  // str += "Basic Information,,,,,,,,,,Related Picture,,Event Tags\n";
+  str += header.map(function(h){ return h; });
   str += "\n";
 
   console.log("str", str);
 
-  for (var i = 0; i < array.length; i++) {
+  for (var i = 0; i < datalist.length; i++) {
     var line = '';
-    for (var index in array[i]) {
+    for (var index in datalist[i]) {
       if (line !== '') line += ','
 
-      line += array[i][index];
+      line += datalist[i][index];
     }
 
     str += line + '\n';
   }
 
   return str;
+}
+
+function getDataDic(stocks) {
+
+
+  const photoList = stocks.reduce(function (result, stock) {
+   const currentStockPhotos = (stock.photos || []).map(function (photo) {
+     return {
+       code: stock.code,
+       photoId: photo.photoId,
+       name: photo.name,
+       length: photo.length,
+       width: photo.width,
+       height: photo.height,
+     };
+   });
+   return result.concat(currentStockPhotos);
+  }, []);
+  const scannedImageList = stocks.reduce(function(result, stock) {
+    const currentStockPhotos = (stock.scannedImages || []).map(function (photo) {
+      return {
+        code: stock.code,
+        photoId: photo.photoId,
+        name: photo.name,
+      };
+    });
+    return result.concat(currentStockPhotos);
+  }, []);
+  const eventTagList = stocks.reduce(function(result, stock) {
+    const eventNameList = (stock.eventNames || []).map(function(name) {
+      return {
+        code: stock.code,
+        type: "name",
+        value: name,
+      }
+    });
+    const eventDateList = (stock.eventDates || []).map(function(date) {
+      return {
+        code: stock.code,
+        type: "date",
+        value: date,
+      }
+    });
+    const eventLocationList = (stock.eventLocations || []).map(function(location) {
+      return {
+        code: stock.code,
+        type: "location",
+        value: location,
+      }
+    });
+    const eventPeopleList = (stock.eventPeople || []).map(function(person) {
+      return {
+        code: stock.code,
+        type: "people",
+        value: person,
+      }
+    });
+
+    return result.concat(eventNameList, eventDateList, eventLocationList, eventPeopleList);
+  }, []);
+
+  // console.log(basicInfoList);
+  console.log(photoList);
+  console.log(scannedImageList);
+  console.log(eventTagList);
 }
 
 class StockList extends React.PureComponent {
@@ -73,7 +138,26 @@ class StockList extends React.PureComponent {
 
   exportStocks() {
     const { stocks } = this.props;
-    const csvContent = convertStockToCsv(stocks);
+
+    // Basic Information
+    const basicInfoList = stocks.map(function(stock) {
+      return {
+        code: stock.code,
+        receivedDate: stock.receivedDate,
+        description: stock.description,
+        donor: stock.donor,
+        condition: stock.condition,
+        location: stock.location,
+        category: stock.category,
+        sign: stock.sign,
+        remarks: stock.remarks,
+      }
+    });
+    const basicInfoHeader = [ "Code", "Received Date", "Description", "Donor", "Condition", "Location", "Category", "Sign", "Remarks" ];
+    const csvContent = convertStockToCsv(basicInfoHeader, basicInfoList)
+
+    // const csvContent = convertStockToCsv(stocks);
+    // const dataDic = getDataDic(stocks);
     const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
     const link = document.createElement("a");
 
