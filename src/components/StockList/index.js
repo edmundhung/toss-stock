@@ -51,7 +51,7 @@ class StockList extends React.PureComponent {
   exportStocks() {
     const { stocks } = this.props;
 
-    const date = new Date().toISOString().substr(0, 10).replace('-', '');
+    const date = new Date().toISOString().substr(0, 10).replace('-', '').replace('-', '');
     // Basic Information
     const basicInfoList = stocks.map(function(stock) {
       return {
