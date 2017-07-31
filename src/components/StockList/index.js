@@ -20,6 +20,9 @@ import {
   confirmStockDelete,
   cancelStockDelete,
 } from '../../store/stock';
+import {
+  isAdmin,
+} from  '../../store/session';
 import './style.css';
 
 function convertStockToCsv(header, datalist, filename) {
@@ -242,6 +245,7 @@ class StockList extends React.PureComponent {
 
 export function mapStateToProps(state) {
   return {
+    isAdmin: isAdmin(state),
     stocks: getStocks(state),
     deletingStockCode: getDeletingStockCode(state),
     isShowingItemForm: isShowingStockItemForm(state),

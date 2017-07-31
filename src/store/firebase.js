@@ -50,10 +50,24 @@ export default function middleware({ getState }) {
           password,
         } = action.payload;
 
+        const isAdmin = false;
+
         auth
           .signInWithEmailAndPassword(email, password)
           .then(user => {
-            next(acceptLogin(user));
+
+            var adminlist = null;
+            database
+              .ref('/users/admin')
+              .once('value', snapshot => (
+                isAdmin = snapshot.val().includes(email)
+              ), error => console.log(
+                error
+              ));
+
+            console.log('isAdmin', isAdmin);
+
+            next(acceptLogin(user, isAdmin));
           })
           .catch(error => {
             next(rejectLogin(error));
