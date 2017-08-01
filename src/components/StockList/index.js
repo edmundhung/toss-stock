@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import Header from '../Header';
 import StockItemForm from '../StockItemForm';
 import {
+  isAdmin,
   getStocks,
   getNextStockCode,
   getDeletingStockCode,
@@ -140,6 +141,7 @@ class StockList extends React.PureComponent {
   render() {
     const {
       // state
+      isAdmin,
       stocks,
       deletingStockCode,
       isShowingItemForm,
@@ -159,10 +161,12 @@ class StockList extends React.PureComponent {
       <div className="container-fluid">
         <Header>
           <div className="pull-right">
-            <button type="button" className="btn btn-default btn-stock-mgt" onClick={this.exportStocks}>
-              <i className="glyphicon glyphicon-save margin-right-5" />
-              Export
-            </button>
+            {isAdmin &&
+              <button type="button" className="btn btn-default btn-stock-mgt" onClick={this.exportStocks}>
+                <i className="glyphicon glyphicon-save margin-right-5" />
+                Export
+              </button>
+            }
             <button type="button" className="btn btn-default btn-stock-mgt" onClick={() => showItemForm()}>
               <i className="glyphicon glyphicon-plus margin-right-5" />
               Add
@@ -175,6 +179,7 @@ class StockList extends React.PureComponent {
                 <StockItemForm
                   code={nextStockCode}
                   stock={null}
+                  isAdmin={isAdmin}
                   onSubmit={createStock}
                 />
               </Modal.Body>
@@ -242,6 +247,7 @@ class StockList extends React.PureComponent {
 
 export function mapStateToProps(state) {
   return {
+    isAdmin: isAdmin(state),
     stocks: getStocks(state),
     deletingStockCode: getDeletingStockCode(state),
     isShowingItemForm: isShowingStockItemForm(state),

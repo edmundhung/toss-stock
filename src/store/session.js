@@ -12,10 +12,13 @@ export function requestLogin(crediential) {
   };
 }
 
-export function acceptLogin(user) {
+export function acceptLogin(user, isAdmin) {
   return {
     type: LOGIN_SUCCESS,
-    payload: user,
+    payload: {
+      user,
+      isAdmin,
+    },
   };
 }
 
@@ -57,10 +60,15 @@ export function isLoggingIn(state) {
   return state.isLoggingIn;
 }
 
+export function isAdmin(state) {
+  return state.isAdmin;
+}
+
 export const initialState = {
   isLoggingIn: false,
   isLoggingOut: false,
   user: null,
+  isAdmin: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -74,7 +82,8 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoggingIn: false,
-        user: action.payload,
+        user: action.payload.user,
+        isAdmin: action.payload.isAdmin,
       };
     case LOGIN_FAILURE:
       return {

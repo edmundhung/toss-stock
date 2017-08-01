@@ -8,6 +8,7 @@ import StockEventForm from '../StockEventForm';
 import StockPhotoForm from '../StockPhotoForm';
 import categoryDescription from '../../config/category.json'
 import {
+  isAdmin,
   getStockByCode,
   getItemFormCode,
   getEventFormCode,
@@ -53,6 +54,7 @@ class StockDetail extends React.PureComponent {
   render() {
     const {
       // state
+      isAdmin,
       stock,
       isShowingItemForm,
       isShowingEventForm,
@@ -111,6 +113,7 @@ class StockDetail extends React.PureComponent {
                     <StockItemForm
                       code={stock.code}
                       stock={stock}
+                      isAdmin={isAdmin}
                       onSubmit={updateStockItem}
                     />
                   </Modal.Body>
@@ -370,6 +373,7 @@ export function mapStateToProps(state, props) {
   const stock = stockByCode[code];
 
   return {
+    isAdmin: isAdmin(state),
     stock,
     isShowingItemForm: isShowingStockItemForm(state),
     isShowingEventForm: isShowingStockEventForm(state),

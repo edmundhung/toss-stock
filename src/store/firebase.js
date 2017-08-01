@@ -53,7 +53,13 @@ export default function middleware({ getState }) {
         auth
           .signInWithEmailAndPassword(email, password)
           .then(user => {
-            next(acceptLogin(user));
+            database
+              .ref('/users/admin')
+              .once('value', snapshot => next(
+                acceptLogin(user, snapshot.val().includes(email))
+              ), error => console.log(
+                error
+              ));
           })
           .catch(error => {
             next(rejectLogin(error));
