@@ -182,6 +182,7 @@ class StockItemForm extends React.PureComponent {
     const {
       props: {
         code,
+        isAdmin,
       },
       state: {
         submitted,
@@ -374,20 +375,22 @@ class StockItemForm extends React.PureComponent {
             {submitted && categoryError}
           </div>
         </div>
-        <div className={classNames('form-group', { 'has-error': submitted && signError })}>
-          <label htmlFor="stock-sign">Sign:</label>
-          <input
-            disabled={!this.props.stock}
-            id="stock-sign"
-            className="form-control"
-            type="text"
-            value={sign}
-            onChange={this.updateSign}
-          />
-          <div className="help-block">
-            {submitted && signError}
+        {isAdmin &&
+          <div className={classNames('form-group', { 'has-error': submitted && signError })}>
+            <label htmlFor="stock-sign">Sign:</label>
+            <input
+              disabled={!this.props.stock}
+              id="stock-sign"
+              className="form-control"
+              type="text"
+              value={sign}
+              onChange={this.updateSign}
+            />
+            <div className="help-block">
+              {submitted && signError}
+            </div>
           </div>
-        </div>
+        }
         <div className={classNames('form-group', { 'has-error': submitted && remarksError })}>
           <label htmlFor="stock-remarks">Remarks:</label>
           <textarea

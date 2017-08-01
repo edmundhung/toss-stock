@@ -13,7 +13,6 @@ export function requestLogin(crediential) {
 }
 
 export function acceptLogin(user, isAdmin) {
-  console.log(isAdmin);
   return {
     type: LOGIN_SUCCESS,
     payload: {
