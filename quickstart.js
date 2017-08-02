@@ -7,7 +7,10 @@ var googleAuth = require('google-auth-library');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
+var SCOPES = [
+  'https://www.googleapis.com/auth/drive.metadata.readonly',
+  'https://www.googleapis.com/auth/drive.file'
+];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'drive-nodejs-quickstart.json';
@@ -20,7 +23,10 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   }
   // Authorize a client with the loaded credentials, then call the
   // Drive API.
-  authorize(JSON.parse(content), listFiles);
+  // authorize(JSON.parse(content), listFiles);
+  // authorize(JSON.parse(content), GetFileById);
+  authorize(JSON.parse(content), SimpleUploadFile);
+  // authorize(JSON.parse(content), retrieveAllFilesInFolder('0B3U0LUtrh4OiYXhfTXJFeUY0VFU'));
 });
 
 /**
@@ -114,7 +120,6 @@ function listFiles(auth) {
       return;
     }
     var files = response.files;
-    console.log(response);
     if (files.length == 0) {
       console.log('No files found.');
     } else {
@@ -126,3 +131,74 @@ function listFiles(auth) {
     }
   });
 }
+
+function GetFileById(auth) {
+  var service = google.drive('v3');
+  var fileId = '0B3U0LUtrh4OiUE1qeXlla0lzdUU';
+  service.files.get({
+    auth: auth,
+    fileId: fileId,
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+    var file = response;
+    console.log('\r\n*** Get File By ID:');
+    console.log('%s (%s)', file.name, file.id);
+  });
+}
+
+function SimpleUploadFile(auth) {
+  var service = google.drive('v3');
+  var folderId = '0B3U0LUtrh4OiYXhfTXJFeUY0VFU';
+  var fileMetadata = {
+    'name': 'test.jpg',
+    'parents': folderId,
+  };
+  var media = {
+    mimeType: 'image/jpeg',
+    body: fs.createReadStream('C:/test.jpg')
+  };
+  service.files.create({
+    resource: fileMetadata,
+    media: media,
+    fields: 'id'
+  }, function(err, file) {
+    if(err) {
+      // Handle error
+      console.log(err);
+    } else {
+      console.log('File Id: ', file.id);
+    }
+  });
+}
+
+/**
+ * Retrieve a list of files belonging to a folder.
+ *
+ * @param {String} folderId ID of the folder to retrieve files from.
+ * @param {Function} callback Function to call when the request is complete.
+ *
+ */
+// function retrieveAllFilesInFolder(folderId, callback) {
+//   var retrievePageOfChildren = function(request, result) {
+//     request.execute(function(resp) {
+//       result = result.concat(resp.items);
+//       var nextPageToken = resp.nextPageToken;
+//       if (nextPageToken) {
+//         request = google.drive('v3').children.list({
+//           'folderId' : folderId,
+//           'pageToken': nextPageToken
+//         });
+//         retrievePageOfChildren(request, result);
+//       } else {
+//         callback(result);
+//       }
+//     });
+//   }
+//   var initialRequest = google.drive('v3').children.list({
+//       'folderId' : folderId
+//     });
+//   retrievePageOfChildren(initialRequest, []);
+// }
