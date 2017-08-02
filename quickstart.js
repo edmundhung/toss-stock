@@ -8,12 +8,14 @@ var googleAuth = require('google-auth-library');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-nodejs-quickstart.json
 var SCOPES = [
-  'https://www.googleapis.com/auth/drive.metadata.readonly',
-  'https://www.googleapis.com/auth/drive.file'
+  // 'https://www.googleapis.com/auth/drive.metadata.readonly',
+  'https://www.googleapis.com/auth/drive.file',
 ];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'drive-nodejs-quickstart.json';
+
+console.log(TOKEN_PATH);
 
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', function processClientSecrets(err, content) {
@@ -23,11 +25,79 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   }
   // Authorize a client with the loaded credentials, then call the
   // Drive API.
+
+  // List files
   // authorize(JSON.parse(content), listFiles);
+
+  // Get a file details by file ID
   // authorize(JSON.parse(content), GetFileById);
-  authorize(JSON.parse(content), SimpleUploadFile);
-  // authorize(JSON.parse(content), retrieveAllFilesInFolder('0B3U0LUtrh4OiYXhfTXJFeUY0VFU'));
+
+  // Upload a signle file (< 5MB) to a specific folder
+  // authorize(JSON.parse(content), SimpleUploadFile);
+
+  // Search file by name (to be continue)
+  // authorize(JSON.parse(content), retrieveAllFilesInFolder);
+  authorize(JSON.parse(content), searchFile);
+  // var fetchPage = function(pageToken, pageFn, callback) {
+  //   var auth = JSON.parse(content);
+  //   google.drive('v3').files.list({
+  //     auth: auth,
+  //     q: "mimeType='image/jpg'",
+  //     fields: 'nextPageToken, files(id, name)',
+  //     spaces: 'drive',
+  //     pageToken: pageToken
+  //   }, function(err, res) {
+  //     if(err) {
+  //       callback(err);
+  //     } else {
+  //       res.files.forEach(function(file) {
+  //         console.log('Found file: ', file.name, file.id);
+  //       });
+  //       if (res.nextPageToken) {
+  //         console.log("Page token", res.nextPageToken);
+  //         pageFn(res.nextPageToken, pageFn, callback);
+  //       } else {
+  //         callback();
+  //       }
+  //     }
+  //   });
+  // };
+  //
+  // fetchPage(null, fetchPage, function(err) {
+  //   if (err) {
+  //     // Handle error
+  //     console.log(err);
+  //   } else {
+  //     // All pages fetched
+  //   }
+  // });
 });
+
+function searchFile(auth) {
+  var service = google.drive('v3');
+  service.files.list({
+    auth: auth,
+    q: "mimeType='image/jpeg'",
+    // q: "name='Desert.jpg'",
+    fields: 'nextPageToken, files(id, name, parents)',
+    spaces: 'drive',
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+    var files = response.files;
+    if (files.length == 0) {
+      console.log('No files found.');
+    } else {
+      console.log('Searched Files:');
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        console.log('%s (%s)', file.name, file.id, file.parents);
+      }
+    }
+  });
+}
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -134,16 +204,15 @@ function listFiles(auth) {
 
 function GetFileById(auth) {
   var service = google.drive('v3');
-  var fileId = '0B3U0LUtrh4OiUE1qeXlla0lzdUU';
+  var fileId = '0B3U0LUtrh4Oic2NEYjJ3cm1Qd28';
   service.files.get({
     auth: auth,
     fileId: fileId,
-  }, function(err, response) {
+  }, function(err, file) {
     if (err) {
       console.log('The API returned an error: ' + err);
       return;
     }
-    var file = response;
     console.log('\r\n*** Get File By ID:');
     console.log('%s (%s)', file.name, file.id);
   });
@@ -151,28 +220,35 @@ function GetFileById(auth) {
 
 function SimpleUploadFile(auth) {
   var service = google.drive('v3');
-  var folderId = '0B3U0LUtrh4OiYXhfTXJFeUY0VFU';
+  var folderId = '0B3U0LUtrh4OiZ1BvN2xoWXVSR00'; // Folder 'Scanned Images'
   var fileMetadata = {
     'name': 'test.jpg',
-    'parents': folderId,
+    'parents': [folderId],
   };
   var media = {
     mimeType: 'image/jpeg',
     body: fs.createReadStream('C:/test.jpg')
   };
   service.files.create({
+    auth: auth,
     resource: fileMetadata,
     media: media,
-    fields: 'id'
+    fields: 'name, id, parents'
   }, function(err, file) {
     if(err) {
       // Handle error
       console.log(err);
     } else {
+      console.log('File Name: ', file.name);
       console.log('File Id: ', file.id);
+      console.log('File parents: ', file.parents);
     }
   });
 }
+
+
+
+
 
 /**
  * Retrieve a list of files belonging to a folder.
@@ -188,7 +264,7 @@ function SimpleUploadFile(auth) {
 //       var nextPageToken = resp.nextPageToken;
 //       if (nextPageToken) {
 //         request = google.drive('v3').children.list({
-//           'folderId' : folderId,
+//           'folderId' : [folderId],
 //           'pageToken': nextPageToken
 //         });
 //         retrievePageOfChildren(request, result);
