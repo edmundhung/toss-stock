@@ -67,6 +67,8 @@ export default function middleware({ getState }) {
         break;
       }
       case LOGOUT_REQUEST: {
+        database.ref('/snapshot').off();
+
         auth
           .signOut()
           .then(() => {
