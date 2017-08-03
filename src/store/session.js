@@ -22,10 +22,10 @@ export function acceptLogin(user, isAdmin) {
   };
 }
 
-export function rejectLogin(error) {
+export function rejectLogin(loginError) {
   return {
     type: LOGIN_FAILURE,
-    payload: error,
+    payload: loginError,
   };
 }
 
@@ -64,11 +64,16 @@ export function isAdmin(state) {
   return state.isAdmin;
 }
 
+export function loginError(state) {
+  return state.loginError;
+}
+
 export const initialState = {
   isLoggingIn: false,
   isLoggingOut: false,
   user: null,
   isAdmin: false,
+  loginError: '',
 };
 
 export default function reducer(state = initialState, action) {
@@ -89,6 +94,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoggingIn: false,
+        loginError: action.payload,
       };
     case LOGOUT_REQUEST:
       return {

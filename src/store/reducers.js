@@ -13,6 +13,7 @@ export const getUser = state => sessionModule.getUser(state.session);
 export const isLoggedIn = state => sessionModule.isLoggedIn(state.session);
 export const isLoggingIn = state => sessionModule.isLoggingIn(state.session);
 export const isAdmin = state => sessionModule.isAdmin(state.session);
+export const loginError = state => sessionModule.loginError(state.session);
 export const getHistory = state => state.history;
 export const getStocks = state => stockModule.getStocks(state.stock);
 export const getNextStockCode = state => stockModule.getNextStockCode(state.stock);

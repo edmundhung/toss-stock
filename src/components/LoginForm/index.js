@@ -1,5 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import {
+  loginError,
+} from '../../store/reducers';
 import './style.css';
 
 class LoginForm extends React.PureComponent {
@@ -65,6 +69,8 @@ class LoginForm extends React.PureComponent {
     }
 
     this.props.onSubmit(user);
+    this.state.emailError = '';
+    this.state.passwordError = '';
   }
 
   switchUser() {
@@ -93,6 +99,7 @@ class LoginForm extends React.PureComponent {
     const {
       props: {
         defaultEmail,
+        loginError,
       },
       state: {
         submitted,
@@ -103,9 +110,30 @@ class LoginForm extends React.PureComponent {
       },
     } = this;
 
+    let loginEmailError = '';
+    let loginPasswordError = '';
+
+    if (submitted && loginError != null) {
+      switch (loginError.code) {
+        case 'auth/wrong-password':
+          loginPasswordError = 'Invalid password.';
+          break;
+        case 'auth/invalid-email':
+          loginEmailError = 'Invalid email.';
+          break;
+        case 'auth/user-not-found':
+          loginEmailError = 'User not found.';
+          break;
+        case 'auth/too-many-requests':
+          loginPasswordError = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+        default:
+          break;
+      }
+    }
+
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className={classNames('form-group', { 'has-error': submitted && emailError })}>
+        <div className={classNames('form-group', { 'has-error': (submitted && emailError) || loginEmailError})}>
           <div className="input-group">
             <input
               id="user-email"
@@ -125,10 +153,10 @@ class LoginForm extends React.PureComponent {
             </div>
           </div>
           <div className="help-block">
-            {submitted && emailError}
+            {(submitted && emailError) || loginEmailError}
           </div>
         </div>
-        <div className={classNames('form-group', { 'has-error': submitted && passwordError })}>
+        <div className={classNames('form-group', { 'has-error': (submitted && passwordError) || loginPasswordError})}>
           <div className="input-group">
             <input
               id="user-password"
@@ -147,7 +175,7 @@ class LoginForm extends React.PureComponent {
             </div>
           </div>
           <div className="help-block">
-            {submitted && passwordError}
+            {(submitted && passwordError) || loginPasswordError}
           </div>
         </div>
       </form>
@@ -155,4 +183,10 @@ class LoginForm extends React.PureComponent {
   }
 }
 
-export default LoginForm;
+export function mapStateToProps(state) {
+  return {
+    loginError: loginError(state),
+  }
+}
+
+export default connect(mapStateToProps)(LoginForm);
