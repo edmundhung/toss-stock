@@ -10,6 +10,7 @@ class StockPhotoForm extends React.PureComponent {
     this.updateLength = this.updateLength.bind(this);
     this.updateWidth = this.updateWidth.bind(this);
     this.updateHeight = this.updateHeight.bind(this);
+    this.updatePath = this.updatePath.bind(this);
     this.reset = this.reset.bind(this);
 
     this.state = this.getInitialFormState();
@@ -22,6 +23,8 @@ class StockPhotoForm extends React.PureComponent {
       photoId: '',
       name: '',
       nameError: '',
+      file: '',
+      path: '',
     };
 
     if (!isScanPhoto) {
@@ -52,6 +55,7 @@ class StockPhotoForm extends React.PureComponent {
 
     let photo = {
       name: this.state.name.trim(),
+      file: this.state.file,
     };
 
     if (!isScanPhoto) {
@@ -133,6 +137,21 @@ class StockPhotoForm extends React.PureComponent {
     this.handleChange('height', event.target.value);
   }
 
+  updatePath(event) {
+    let reader = new FileReader();
+    let file = event.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        path: reader.result,
+      });
+    }
+
+    reader.readAsDataURL(file);
+
+  }
+
   render() {
    const {
      props: {
@@ -142,6 +161,8 @@ class StockPhotoForm extends React.PureComponent {
        submitted,
        name,
        nameError,
+       file,
+       path,
        length,
        lengthError,
        width,
@@ -151,12 +172,19 @@ class StockPhotoForm extends React.PureComponent {
      }
    } = this;
 
+    let $imagePreview = null;
+    if (path) {
+      $imagePreview = (<img src={path} />);
+    } else {
+      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+    }
+
    return (
      <form className="clearfix" onSubmit={this.handleSubmit}>
        <div className={classNames('form-group', { 'has-error': submitted && nameError })}>
-         <label htmlFor="stock-id-photo-name">File name of photo:</label>
+         <label htmlFor="photo-name">File name of photo:</label>
          <input
-           id="stock-id-photo-name"
+           id="photo-name"
            className="form-control"
            type="text"
            value={name}
@@ -168,11 +196,11 @@ class StockPhotoForm extends React.PureComponent {
        </div>
        {type === "ID_PHOTO" && (
          <div className={classNames('form-group', { 'has-error': submitted && (lengthError || widthError || heightError)})}>
-           <label htmlFor="stock-id-photo-length">Measurements:</label>
+           <label htmlFor="photo-length">Measurements:</label>
            <div className="row">
              <div className="col-xs-3 no-right-padding">
                <input
-                 id="stock-id-photo-length"
+                 id="photo-length"
                  className="form-control"
                  type="text"
                  value={length}
@@ -185,7 +213,7 @@ class StockPhotoForm extends React.PureComponent {
              </div>
              <div className="col-xs-3 no-left-padding no-right-padding">
                <input
-                 id="stock-id-photo-width"
+                 id="photo-width"
                  className="form-control"
                  type="text"
                  value={width}
@@ -198,7 +226,7 @@ class StockPhotoForm extends React.PureComponent {
              </div>
              <div className="col-xs-3 no-left-padding no-right-padding">
                <input
-                 id="stock-id-photo-height"
+                 id="photo-height"
                  className="form-control"
                  type="text"
                  value={height}
@@ -221,6 +249,18 @@ class StockPhotoForm extends React.PureComponent {
            </div>
          </div>
        )}
+       <div className="form-group">
+        <label htmlFor="photo-path">Photo path:</label>
+        <input
+          id="photo-path"
+          className="form-control"
+          type="file"
+          onChange={this.updatePath}
+        />
+        <div className="imgPreview">
+           {$imagePreview}
+         </div>
+       </div>
        <div className="pull-right">
          <button type="submit" className="btn btn-warning">Submit</button>
          <button type="reset" className="btn btn-default" onClick={this.reset}>Reset</button>

@@ -12,3 +12,14 @@
     height: 38px;
     padding: 8px;
 }
+
+.imgPreview {
+  margin-top: 15px;
+  text-align: center;
+  height: 300px;
+  border: 1px dotted #888888;
+}
+
+.imgPreview img {
+  height: 100%;
+}
