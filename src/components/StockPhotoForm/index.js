@@ -138,8 +138,8 @@ class StockPhotoForm extends React.PureComponent {
   }
 
   updatePath(event) {
-    let reader = new FileReader();
-    let file = event.target.files[0];
+    const reader = new FileReader();
+    const file = event.target.files[0];
 
     reader.onloadend = () => {
       this.setState({
@@ -161,7 +161,6 @@ class StockPhotoForm extends React.PureComponent {
        submitted,
        name,
        nameError,
-       file,
        path,
        length,
        lengthError,
@@ -174,7 +173,7 @@ class StockPhotoForm extends React.PureComponent {
 
     let $imagePreview = null;
     if (path) {
-      $imagePreview = (<img src={path} />);
+      $imagePreview = (<img src={path} alt="Preview"/>);
     } else {
       $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
     }
